@@ -1,14 +1,12 @@
 import argparse
 import os
 import sys
-import torch
-from torch.utils.data import DataLoader
 
-# -------------------------------------------------------------------
-# Fix Python path so imports work no matter where train.py is run
-# -------------------------------------------------------------------
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(REPO_ROOT)
+
+import torch
+from torch.utils.data import DataLoader
 
 # -------------------------------------------------------------------
 # Imports from the repository
