@@ -1,15 +1,22 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 import argparse
+import os
+import sys
+
+# Add the repository root to the Python path
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(REPO_ROOT)
+
 import torch
 from torch.utils.data import DataLoader
 
+# -------------------------------------------------------------------
+# Imports from the repository
+# -------------------------------------------------------------------
 from config import get_config
 from networks.swin_transformer_unet_skip_expand_decoder_sys import SwinTransformerSys
 from datasets.dataset_fluo import FluoDataset
 from scripts.trainer import train_one_epoch
+
 
 # -------------------------------------------------------------------
 # Argument parser
@@ -18,21 +25,31 @@ def get_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--cfg", type=str, required=True,
-                        help="Path to YAML config (configs/swin_unet.yaml)")
+                        help="Path to YAML config (e.g., configs/swin_unet.yaml)")
 
     parser.add_argument("--train_list", type=str,
-                        default="datasets/train_list.txt")
+                        default="datasets/train_list.txt",
+                        help="Path to training data list")
 
     parser.add_argument("--val_list", type=str,
-                        default="datasets/test_list.txt")
+                        default="datasets/test_list.txt",
+                        help="Path to validation data list")
 
     parser.add_argument("--output_dir", type=str,
-                        default="results/checkpoints")
+                        default="results/checkpoints",
+                        help="Directory to save checkpoints")
 
-    parser.add_argument("--img_size", type=int, default=224)
-    parser.add_argument("--batch_size", type=int, default=4)
-    parser.add_argument("--num_epochs", type=int, default=50)
-    parser.add_argument("--num_workers", type=int, default=2)
+    parser.add_argument("--img_size", type=int, default=224,
+                        help="Input image size")
+
+    parser.add_argument("--batch_size", type=int, default=4,
+                        help="Batch size for training")
+
+    parser.add_argument("--num_epochs", type=int, default=50,
+                        help="Number of training epochs")
+
+    parser.add_argument("--num_workers", type=int, default=2,
+                        help="Number of data loading workers")
 
     return parser.parse_args()
 
@@ -53,7 +70,6 @@ if __name__ == "__main__":
         num_classes=2,
         in_chans=1
     ).cuda()
-
     print("Model loaded.")
 
     print("\nLoading training dataset...")
@@ -68,7 +84,6 @@ if __name__ == "__main__":
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.TRAIN.BASE_LR)
 
     print("\nTraining started...\n")
-
     for epoch in range(args.num_epochs):
         loss, dice = train_one_epoch(
             model,
@@ -77,7 +92,6 @@ if __name__ == "__main__":
             epoch,
             args.output_dir
         )
-
         print(f"Epoch {epoch+1}/{args.num_epochs} | Loss={loss:.4f} | Dice={dice:.4f}")
 
     print("\nTraining Completed.")
