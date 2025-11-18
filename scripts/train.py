@@ -25,31 +25,25 @@ def get_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--cfg", type=str, required=True,
-                        help="Path to YAML config (e.g., configs/swin_unet.yaml)")
+                        help="Path to YAML config (configs/swin_unet.yaml)")
 
     parser.add_argument("--train_list", type=str,
-                        default="datasets/train_list.txt",
-                        help="Path to training data list")
+                        default="datasets/train_list.txt")
 
     parser.add_argument("--val_list", type=str,
-                        default="datasets/test_list.txt",
-                        help="Path to validation data list")
+                        default="datasets/test_list.txt")
 
     parser.add_argument("--output_dir", type=str,
-                        default="results/checkpoints",
-                        help="Directory to save checkpoints")
+                        default="results/checkpoints")
 
-    parser.add_argument("--img_size", type=int, default=224,
-                        help="Input image size")
+    parser.add_argument("--img_size", type=int, default=224)
+    parser.add_argument("--batch_size", type=int, default=4)
+    parser.add_argument("--num_epochs", type=int, default=50)
+    parser.add_argument("--num_workers", type=int, default=2)
 
-    parser.add_argument("--batch_size", type=int, default=4,
-                        help="Batch size for training")
-
-    parser.add_argument("--num_epochs", type=int, default=50,
-                        help="Number of training epochs")
-
-    parser.add_argument("--num_workers", type=int, default=2,
-                        help="Number of data loading workers")
+    # Add this line to fix the error
+    parser.add_argument("--opts", nargs='*', default=None,
+                        help="Additional options to override config")
 
     return parser.parse_args()
 
