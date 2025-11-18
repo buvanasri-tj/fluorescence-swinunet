@@ -7,7 +7,7 @@ import sys
 sys.path.append('/content/fluorescence-swinunet')
 
 from config import get_config
-from networks.swin_transformer_unet_skip_expand_decoder_sys import SwinUnet
+from networks.swin_transformer_unet_skip_expand_decoder_sys import SwinTransformerSys
 from datasets.dataset_fluo import FluoDataset
 from trainer import train_one_epoch
 
