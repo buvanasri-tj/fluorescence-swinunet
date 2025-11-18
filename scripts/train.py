@@ -1,21 +1,15 @@
-import argparse
-import os
 import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sys.path.append(REPO_ROOT)
-
+import argparse
 import torch
 from torch.utils.data import DataLoader
 
-# -------------------------------------------------------------------
-# Imports from the repository
-# -------------------------------------------------------------------
 from config import get_config
 from networks.swin_transformer_unet_skip_expand_decoder_sys import SwinTransformerSys
 from datasets.dataset_fluo import FluoDataset
-from scripts.trainer import train_one_epoch   # correct path
-
+from scripts.trainer import train_one_epoch
 
 # -------------------------------------------------------------------
 # Argument parser
