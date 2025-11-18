@@ -1,0 +1,30 @@
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Virtual env
+venv/
+env/
+
+# Checkpoints
+*.pth
+results/
+checkpoints/
+predictions/
+overlays/
+
+# Dataset (DO NOT upload your images!)
+data/*
+
+# Colab checkpoints
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
