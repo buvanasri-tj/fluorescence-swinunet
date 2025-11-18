@@ -6,6 +6,9 @@ from torch.utils.data import DataLoader
 from PIL import Image
 from tqdm import tqdm
 
+import sys
+sys.path.append('/content/fluorescence-swinunet')
+
 from networks.vision_transformer import SwinUnet
 from datasets.dataset_fluo import FluoDataset
 from config import get_config
