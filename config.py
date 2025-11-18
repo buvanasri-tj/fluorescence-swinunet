@@ -1,42 +1,28 @@
-# config.py
+# config.py (safe version without ml_collections)
 import yaml
-from ml_collections import ConfigDict
 import argparse
-
-def load_yaml_cfg(cfg_path):
-    with open(cfg_path, "r") as f:
-        raw_cfg = yaml.safe_load(f)
-    return raw_cfg
-
-def dict_to_configdict(d):
-    """Convert nested Python dicts into ml-collections ConfigDict."""
-    if isinstance(d, dict):
-        cd = ConfigDict()
-        for k, v in d.items():
-            cd[k] = dict_to_configdict(v)
-        return cd
-    else:
-        return d
 
 def get_config(args):
     """
-    Loads the YAML config file and merges it into a ConfigDict
-    similar to the original Swin-UNet implementation.
+    Loads YAML config and merges CLI overrides.
     """
-    yaml_cfg = load_yaml_cfg(args.cfg)
-    cfg = dict_to_configdict(yaml_cfg)
 
-    # Attach TRAIN and DATA sections if missing
-    if "TRAIN" not in cfg:
-        cfg.TRAIN = ConfigDict()
-        cfg.TRAIN.USE_CHECKPOINT = False
+    # Load YAML
+    with open(args.cfg, "r") as f:
+        cfg = yaml.safe_load(f)
 
-    if "DATA" not in cfg:
-        cfg.DATA = ConfigDict()
-        cfg.DATA.IMG_SIZE = args.img_size
+    # Convert YAML dictionary to a simple Python dictionary
+    class Config:
+        pass
+    config = Config()
 
-    # Store checkpoint path
-    if "MODEL" in cfg and "PRETRAIN_CKPT" in cfg.MODEL:
-        cfg.MODEL.PRETRAIN_CKPT = cfg.MODEL.PRETRAIN_CKPT
+    # Turn nested YAML into attributes
+    for key, value in cfg.items():
+        setattr(config, key, value)
 
-    return cfg
+    # Apply CLI overrides from args.opts
+    if args.opts:
+        for k, v in zip(args.opts[0::2], args.opts[1::2]):
+            setattr(config, k, v)
+
+    return config
