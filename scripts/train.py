@@ -4,7 +4,10 @@ import torch
 from torch.utils.data import DataLoader
 
 import sys
-sys.path.append('/content/fluorescence-swinunet')
+
+# Add repository root to PYTHONPATH
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(REPO_ROOT)
 
 from config import get_config
 from networks.swin_transformer_unet_skip_expand_decoder_sys import SwinTransformerSys
