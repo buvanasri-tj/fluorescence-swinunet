@@ -1,22 +1,21 @@
-import argparse
 import os
 import sys
-
-# Add the repository root to the Python path
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sys.path.append(REPO_ROOT)
-
+import argparse
 import torch
 from torch.utils.data import DataLoader
 
-# -------------------------------------------------------------------
-# Imports from the repository
-# -------------------------------------------------------------------
+# ------------------------------------------------------------------
+# ADD REPO ROOT TO PYTHONPATH (THE ONLY CORRECT WAY IN COLAB)
+# ------------------------------------------------------------------
+FILE_DIR = os.path.dirname(os.path.abspath(__file__))          # /content/fluorescence-swinunet/scripts
+REPO_ROOT = os.path.abspath(os.path.join(FILE_DIR, ".."))      # /content/fluorescence-swinunet
+sys.path.insert(0, REPO_ROOT)
+
+# Now imports will work
 from config import get_config
 from networks.swin_transformer_unet_skip_expand_decoder_sys import SwinTransformerSys
 from datasets.dataset_fluo import FluoDataset
 from scripts.trainer import train_one_epoch
-
 
 # -------------------------------------------------------------------
 # Argument parser
