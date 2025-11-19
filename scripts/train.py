@@ -60,7 +60,7 @@ if __name__ == "__main__":
     print("\nLoading Swin-UNet model...")
     model = SwinTransformerSys(
         img_size=args.img_size,
-        num_classes=2,
+        num_classes=1,
         in_chans=1
     ).cuda()
     print("Model loaded.")
