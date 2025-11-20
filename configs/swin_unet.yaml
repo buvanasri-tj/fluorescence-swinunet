@@ -2,8 +2,8 @@ experiment_name: "swinunet_segmentation"
 
 model:
   name: "SwinUNet"
-  in_channels: 3       # green + red + yellow
-  num_classes: 2       # background, cell
+  in_channels: 3
+  num_classes: 2
 
 training:
   epochs: 100
@@ -14,17 +14,14 @@ training:
   scheduler: "cosine"
 
 dataset:
-  train_list: "datasets/train_list.txt"
-  val_list: "datasets/val_list.txt"
+  root_dir: "data/"
   image_size: 256
   augmentations: true
-  paired_channels: ["green", "red", "yellow"]
 
 paths:
-  green_dir: "data/green/"
-  red_dir: "data/red/"
-  yellow_dir: "data/yellow/"
-  mask_dir: "data/masks/"
+  green: "data/green"
+  red: "data/red"
+  yellow: "data/yellow"
 
 save:
   ckpt_dir: "checkpoints/swinunet/"
