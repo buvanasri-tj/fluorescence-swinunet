@@ -1,32 +1,61 @@
 import os
+import cv2
 import numpy as np
-from PIL import Image
+from glob import glob
 
-def make_overlay(image_path, mask_path, output_path, color=(255,0,0), alpha=0.4):
-    img = Image.open(image_path).convert("RGB")
-    mask = Image.open(mask_path).convert("L")
-    mask_np = np.array(mask)
+def ensure_dir(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
 
-    overlay = np.zeros((mask_np.shape[0], mask_np.shape[1], 3), dtype=np.uint8)
-    overlay[mask_np > 0] = color
+def make_overlay(img_path, mask_path, out_path, alpha=0.5):
+    """Create segmentation overlay (mask blended on top of image)."""
 
-    overlay_img = Image.fromarray(overlay)
-    blended = Image.blend(img, overlay_img, alpha)
+    img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+    mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
 
-    blended.save(output_path)
+    if img is None or mask is None:
+        print(f"[WARN] Missing image or mask: {img_path}")
+        return
 
+    img_color = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
-def batch_overlay(images_dir, preds_dir, output_dir):
-    os.makedirs(output_dir, exist_ok=True)
+    # Create a red mask overlay
+    mask_color = np.zeros_like(img_color)
+    mask_color[:, :, 2] = mask   # Red channel = mask
 
-    images = sorted(os.listdir(images_dir))
-    preds = sorted(os.listdir(preds_dir))
+    blended = cv2.addWeighted(img_color, 1 - alpha, mask_color, alpha, 0)
 
-    for img_name, pred_name in zip(images, preds):
-        make_overlay(
-            os.path.join(images_dir, img_name),
-            os.path.join(preds_dir, pred_name),
-            os.path.join(output_dir, img_name)
-        )
+    cv2.imwrite(out_path, blended)
 
-    print(f"Overlay images saved to: {output_dir}")
+def process_folder(images_dir, masks_dir, out_dir):
+    ensure_dir(out_dir)
+
+    images = sorted(glob(os.path.join(images_dir, "*.png")))
+
+    for img_path in images:
+        fname = os.path.basename(img_path)
+
+        mask_path = os.path.join(masks_dir, fname)
+        if not os.path.exists(mask_path):
+            print(f"[WARN] Missing mask for {fname}, skipping.")
+            continue
+
+        out_path = os.path.join(out_dir, fname)
+        make_overlay(img_path, mask_path, out_path)
+
+    print("Overlays saved to:", out_dir)
+
+def main():
+    # Input segmentation predictions from the model
+    PRED_MASK_DIR = "results/segmentation/test_outputs/masks"
+    ORIGINAL_IMG_DIR = "results/segmentation/test_outputs/images"
+
+    OUT_DIR = "results/segmentation/overlays"
+
+    if not os.path.isdir(PRED_MASK_DIR) or not os.path.isdir(ORIGINAL_IMG_DIR):
+        raise FileNotFoundError("Predictions not found. Run test_segmentation.py first.")
+
+    process_folder(ORIGINAL_IMG_DIR, PRED_MASK_DIR, OUT_DIR)
+
+if __name__ == "__main__":
+    main()
