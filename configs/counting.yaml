@@ -1,4 +1,27 @@
-# configs/counting.yaml
-segmentation_threshold: 0.5
-min_area: 20          # px - filter tiny objects
-connectivity: 8
+experiment_name: "cell_counting"
+
+model:
+  name: "CountingNet"
+  in_channels: 3
+
+training:
+  epochs: 60
+  batch_size: 8
+  learning_rate: 1e-4
+  weight_decay: 1e-5
+
+dataset:
+  train_list: "datasets/train_list.txt"
+  val_list: "datasets/val_list.txt"
+  image_size: 256
+  paired_channels: ["green", "red", "yellow"]
+
+paths:
+  green_dir: "data/green/"
+  red_dir: "data/red/"
+  yellow_dir: "data/yellow/"
+  count_labels: "data/counts.csv"
+
+save:
+  ckpt_dir: "checkpoints/counting/"
+  save_every: 3
