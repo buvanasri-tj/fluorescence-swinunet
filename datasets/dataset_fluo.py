@@ -3,87 +3,64 @@ from PIL import Image
 from torch.utils.data import Dataset
 import torchvision.transforms as T
 
-
 class FluoDataset(Dataset):
     """
-    Standard fluorescence microscopy segmentation dataset.
-    Expects list file lines in this format:
-
-        path/to/image.png path/to/mask.png   (for train and val)
-        path/to/image.png                    (for test)
-
-    - Works on Windows and Linux paths
-    - Ensures mask is binary {0,1}
-    - Converts images to grayscale
+    Dataset loader for fluorescence PNG images.
+    List files contain ONLY image paths:
+        data/green/train/images/102.png
+    The mask path is automatically inferred as:
+        data/green/train/masks/102.png
     """
 
-    def __init__(self, list_path, img_size=224, is_test=False):
+    def __init__(self, list_path, img_size=224):
         self.img_size = img_size
-        self.is_test = is_test
 
-        if not os.path.exists(list_path):
-            raise FileNotFoundError(f"List file not found: {list_path}")
-
-        self.samples = []
-
+        # Read list file
         with open(list_path, "r") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
+            self.image_paths = [ln.strip().replace("\\", "/") for ln in f if ln.strip()]
 
-                parts = line.split()
+        if len(self.image_paths) == 0:
+            raise RuntimeError(f"No images found in list: {list_path}")
 
-                if self.is_test:
-                    # test set: images only
-                    img = parts[0].replace("\\", "/")
-                    self.samples.append((img, None))
-                else:
-                    # train/val: paired image and mask
-                    if len(parts) != 2:
-                        print(f"[WARNING] Skipping malformed line: {line}")
-                        continue
-
-                    img, mask = parts
-                    img = img.replace("\\", "/")
-                    mask = mask.replace("\\", "/")
-                    self.samples.append((img, mask))
+        # Verify masks exist
+        self.samples = []
+        for img_path in self.image_paths:
+            mask_path = img_path.replace("/images/", "/masks/")
+            if not os.path.exists(img_path):
+                print(f"[WARNING] Missing image: {img_path}")
+                continue
+            if not os.path.exists(mask_path):
+                print(f"[WARNING] Missing mask for: {img_path}")
+                continue
+            self.samples.append((img_path, mask_path))
 
         if len(self.samples) == 0:
-            raise RuntimeError(f"No valid samples found in list: {list_path}")
+            raise RuntimeError("No valid image-mask pairs found.")
 
-        # image transformations
+        # Define transforms
         self.transform_img = T.Compose([
             T.Resize((img_size, img_size)),
             T.ToTensor(),
-            T.Normalize(mean=[0.5], std=[0.5])
+            T.Normalize(mean=[0.5], std=[0.5]),
         ])
 
-        # mask transformations (only for train/val)
         self.transform_mask = T.Compose([
             T.Resize((img_size, img_size), interpolation=Image.NEAREST),
-            T.ToTensor()
+            T.ToTensor(),
         ])
 
     def __len__(self):
         return len(self.samples)
 
-    def __getitem__(self, idx):
-        img_path, mask_path = self.samples[idx]
+    def __getitem__(self, index):
+        img_path, mask_path = self.samples[index]
 
-        # Load image as grayscale
         img = Image.open(img_path).convert("L")
-        img = self.transform_img(img)
-
-        # Test set returns only image
-        if self.is_test:
-            return img, img_path
-
-        # Load mask
         mask = Image.open(mask_path).convert("L")
+
+        img = self.transform_img(img)
         mask = self.transform_mask(mask)
 
-        # Convert mask to binary {0,1}
-        mask = (mask > 0.5).float()
+        mask = (mask > 0.5).float()  # binarize
 
         return img, mask
