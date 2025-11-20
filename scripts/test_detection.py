@@ -1,34 +1,27 @@
-import os
-from ultralytics import YOLO
+import torch
+from models.yolo_detector import YOLODetector
+from datasets.dataset_detect import DetectionDataset
+from torch.utils.data import DataLoader
+
 
 def main():
-    # --- Load trained model ---
-    MODEL_PATH = "results/detection/fluorescence_detector/weights/best.pt"
-    TEST_IMAGES = "data"  # YOLO will recursively find PNGs
+    root = "data"
+    device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    if not os.path.exists(MODEL_PATH):
-        raise FileNotFoundError(f"Trained model not found at: {MODEL_PATH}")
+    model = YOLODetector(in_channels=3, num_classes=1)
+    model.load_state_dict(torch.load("checkpoints/det_epoch_39.pth", map_location=device))
+    model.to(device)
+    model.eval()
 
-    print(f"Loading model: {MODEL_PATH}")
-    model = YOLO(MODEL_PATH)
+    test_ds = DetectionDataset(root, split="test", image_size=512)
+    test_loader = DataLoader(test_ds, batch_size=1)
 
-    # --- Inference ---
-    OUT_DIR = "results/detection/test_outputs"
-    os.makedirs(OUT_DIR, exist_ok=True)
+    with torch.no_grad():
+        for imgs, _ in test_loader:
+            imgs = imgs.to(device)
+            cls_map, box_map = model(imgs)
+            print(cls_map.shape, box_map.shape)
 
-    print("Running detection on test images...")
-
-    results = model.predict(
-        source=TEST_IMAGES,
-        save=True,
-        save_txt=True,
-        save_conf=True,
-        project=OUT_DIR,
-        name="preds"
-    )
-
-    print("Detection completed.")
-    print(f"Predictions saved at: {OUT_DIR}/preds/")
 
 if __name__ == "__main__":
     main()
