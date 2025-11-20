@@ -1,35 +1,46 @@
 import os
-import glob
 
-def gather_images(base):
-    """Return all .png images inside images/ folders under base."""
-    return sorted(glob.glob(os.path.join(base, "*", "images", "*.png")))
+ROOT = "data"   # folder inside your repo
 
-def write_list(path, items):
-    with open(path, "w") as f:
-        for x in items:
-            f.write(x.replace("\\", "/") + "\n")
+splits = ["train", "val", "test"]
+colors = ["green", "red", "yellow"]
 
-if __name__ == "__main__":
+out_train = open("datasets/train_list.txt", "w")
+out_val = open("datasets/val_list.txt", "w")
+out_test = open("datasets/test_list.txt", "w")
 
-    # Root dataset folder
-    ROOT = "data"
+for color in colors:
+    for split in splits:
+        img_dir = f"{ROOT}/{color}/{split}/images"
+        mask_dir = f"{ROOT}/{color}/{split}/masks"
 
-    # Final text list files
-    TRAIN_LIST = "datasets/train_list.txt"
-    VAL_LIST   = "datasets/val_list.txt"
-    TEST_LIST  = "datasets/test_list.txt"
+        if split == "test":
+            # test images do NOT have masks
+            if not os.path.exists(img_dir):
+                continue
+            for img in sorted(os.listdir(img_dir)):
+                if img.endswith(".png"):
+                    out_test.write(f"{img_dir}/{img}\n")
+            continue
 
-    print("Building train/val/test lists...")
+        # For train/val — must include masks
+        if not os.path.exists(img_dir) or not os.path.exists(mask_dir):
+            continue
 
-    train_images = gather_images(os.path.join(ROOT, "*", "train"))
-    val_images   = gather_images(os.path.join(ROOT, "*", "val"))
-    test_images  = gather_images(os.path.join(ROOT, "*", "test"))
+        img_files = sorted(os.listdir(img_dir))
 
-    write_list(TRAIN_LIST, train_images)
-    write_list(VAL_LIST, val_images)
-    write_list(TEST_LIST, test_images)
+        for img in img_files:
+            if not img.endswith(".png"):
+                continue
+            mask = img  # same name as image
+            line = f"{img_dir}/{img} {mask_dir}/{mask}\n"
+            if split == "train":
+                out_train.write(line)
+            elif split == "val":
+                out_val.write(line)
 
-    print(f"Created {TRAIN_LIST}   -> {len(train_images)} images")
-    print(f"Created {VAL_LIST}     -> {len(val_images)} images")
-    print(f"Created {TEST_LIST}    -> {len(test_images)} images")
+out_train.close()
+out_val.close()
+out_test.close()
+
+print("Finished! train_list.txt, val_list.txt, test_list.txt created.")
