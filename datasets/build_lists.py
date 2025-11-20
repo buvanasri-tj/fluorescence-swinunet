@@ -1,58 +1,35 @@
 import os
+import glob
 
-# Root directory of your dataset
-ROOT = "data"
+def gather_images(base):
+    """Return all .png images inside images/ folders under base."""
+    return sorted(glob.glob(os.path.join(base, "*", "images", "*.png")))
 
-# Output list files
-TRAIN_OUT = "datasets/train_list.txt"
-TEST_OUT = "datasets/test_list.txt"
-
-# Valid color channels
-COLORS = ["green", "red", "yellow"]
-
-def pair_paths(image_dir, mask_dir):
-    """
-    Returns sorted list of (image_path, mask_path) for matching filenames.
-    """
-    image_files = sorted(os.listdir(image_dir))
-
-    pairs = []
-    for img in image_files:
-        img_path = os.path.join(image_dir, img)
-        mask_path = os.path.join(mask_dir, img)
-
-        if os.path.exists(mask_path):
-            pairs.append((img_path, mask_path))
-        else:
-            print(f"[WARNING] Mask not found for {img_path}")
-    return pairs
-
-
-def build_list(list_path, data_type="train"):
-    """
-    Writes list of PNG pairs to list_path
-    """
-    with open(list_path, "w") as f:
-        for color in COLORS:
-            img_dir = os.path.join(ROOT, color, data_type, "images")
-            mask_dir = os.path.join(ROOT, color, data_type, "masks")
-
-            if not os.path.exists(img_dir):
-                print(f"[WARNING] Missing folder: {img_dir}")
-                continue
-
-            pairs = pair_paths(img_dir, mask_dir)
-
-            for img, mask in pairs:
-                f.write(f"{img} {mask}\n")
-
-    print(f"[OK] Created {list_path}")
-
+def write_list(path, items):
+    with open(path, "w") as f:
+        for x in items:
+            f.write(x.replace("\\", "/") + "\n")
 
 if __name__ == "__main__":
-    print("Building train/val lists...")
 
-    build_list(TRAIN_OUT, data_type="train")
-    build_list(TEST_OUT, data_type="val")
+    # Root dataset folder
+    ROOT = "data"
 
-    print("Done.")
+    # Final text list files
+    TRAIN_LIST = "datasets/train_list.txt"
+    VAL_LIST   = "datasets/val_list.txt"
+    TEST_LIST  = "datasets/test_list.txt"
+
+    print("Building train/val/test lists...")
+
+    train_images = gather_images(os.path.join(ROOT, "*", "train"))
+    val_images   = gather_images(os.path.join(ROOT, "*", "val"))
+    test_images  = gather_images(os.path.join(ROOT, "*", "test"))
+
+    write_list(TRAIN_LIST, train_images)
+    write_list(VAL_LIST, val_images)
+    write_list(TEST_LIST, test_images)
+
+    print(f"Created {TRAIN_LIST}   -> {len(train_images)} images")
+    print(f"Created {VAL_LIST}     -> {len(val_images)} images")
+    print(f"Created {TEST_LIST}    -> {len(test_images)} images")
