@@ -1,0 +1,8 @@
+# configs/yolo_detector.yaml
+dataset: "./data"  # base data path
+classes: ["cell"]
+img_size: 640
+batch: 16
+epochs: 50
+lr: 0.001
+weights: ""  # path to pretrained yolov8 weights if available
