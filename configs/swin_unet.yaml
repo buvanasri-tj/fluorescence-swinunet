@@ -1,28 +1,31 @@
-MODEL:
-  TYPE: swin
-  NAME: swin_tiny_patch4_window7_224
-  DROP_PATH_RATE: 0.2
-  NUM_CLASSES: 2
-  PRETRAIN_CKPT: "./pretrained_ckpt/swin_tiny_patch4_window7_224.pth"
+experiment_name: "swinunet_segmentation"
 
-  SWIN:
-    FINAL_UPSAMPLE: "expand_first"
-    EMBED_DIM: 96
-    DEPTHS: [2, 2, 2, 2]
-    DECODER_DEPTHS: [2, 2, 2, 1]
-    NUM_HEADS: [3, 6, 12, 24]
-    WINDOW_SIZE: 7
+model:
+  name: "SwinUNet"
+  in_channels: 3       # green + red + yellow
+  num_classes: 2       # background, cell
 
-DATA:
-  IMAGE_SIZE: 224
+training:
+  epochs: 100
+  batch_size: 4
+  learning_rate: 1e-4
+  weight_decay: 1e-5
+  optimizer: "adamw"
+  scheduler: "cosine"
 
-TRAIN:
-  BASE_LR: 0.0001
-  BATCH_SIZE: 8
-  NUM_EPOCHS: 100
-  NUM_WORKERS: 4
+dataset:
+  train_list: "datasets/train_list.txt"
+  val_list: "datasets/val_list.txt"
+  image_size: 256
+  augmentations: true
+  paired_channels: ["green", "red", "yellow"]
 
-AUG:
-  RANDOM_FLIP: True
-  RANDOM_ROTATION: True
+paths:
+  green_dir: "data/green/"
+  red_dir: "data/red/"
+  yellow_dir: "data/yellow/"
+  mask_dir: "data/masks/"
 
+save:
+  ckpt_dir: "checkpoints/swinunet/"
+  save_every: 5
