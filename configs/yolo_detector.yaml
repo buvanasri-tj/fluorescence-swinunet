@@ -3,7 +3,7 @@ experiment_name: "yolo_fluo_detection"
 model:
   name: "YOLODetector"
   in_channels: 3
-  num_classes: 1         # cell
+  num_classes: 1
 
 training:
   epochs: 80
@@ -16,16 +16,14 @@ training:
   gamma: 0.5
 
 dataset:
-  train_list: "datasets/train_list.txt"
-  val_list: "datasets/val_list.txt"
+  root_dir: "data/"
   image_size: 512
-  paired_channels: ["green", "red", "yellow"]
 
 paths:
-  green_dir: "data/green/"
-  red_dir: "data/red/"
-  yellow_dir: "data/yellow/"
-  labels_dir: "data/detection_labels/"
+  green: "data/green"
+  red: "data/red"
+  yellow: "data/yellow"
+  labels: "data/detection_labels"
 
 save:
   ckpt_dir: "checkpoints/detector/"
