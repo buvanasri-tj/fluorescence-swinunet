@@ -1,449 +1,449 @@
-data/green/train/images/102.png data/green/train/masks/102.png
-data/green/train/images/104.png data/green/train/masks/104.png
-data/green/train/images/106.png data/green/train/masks/106.png
-data/green/train/images/107.png data/green/train/masks/107.png
-data/green/train/images/108.png data/green/train/masks/108.png
-data/green/train/images/11.png data/green/train/masks/11.png
-data/green/train/images/112.png data/green/train/masks/112.png
-data/green/train/images/113.png data/green/train/masks/113.png
-data/green/train/images/117.png data/green/train/masks/117.png
-data/green/train/images/119.png data/green/train/masks/119.png
-data/green/train/images/12.png data/green/train/masks/12.png
-data/green/train/images/120.png data/green/train/masks/120.png
-data/green/train/images/121.png data/green/train/masks/121.png
-data/green/train/images/123.png data/green/train/masks/123.png
-data/green/train/images/13.png data/green/train/masks/13.png
-data/green/train/images/131.png data/green/train/masks/131.png
-data/green/train/images/135.png data/green/train/masks/135.png
-data/green/train/images/136.png data/green/train/masks/136.png
-data/green/train/images/137.png data/green/train/masks/137.png
-data/green/train/images/139.png data/green/train/masks/139.png
-data/green/train/images/14.png data/green/train/masks/14.png
-data/green/train/images/142.png data/green/train/masks/142.png
-data/green/train/images/143.png data/green/train/masks/143.png
-data/green/train/images/144.png data/green/train/masks/144.png
-data/green/train/images/1445.png data/green/train/masks/1445.png
-data/green/train/images/1448.png data/green/train/masks/1448.png
-data/green/train/images/145.png data/green/train/masks/145.png
-data/green/train/images/146.png data/green/train/masks/146.png
-data/green/train/images/147.png data/green/train/masks/147.png
-data/green/train/images/148.png data/green/train/masks/148.png
-data/green/train/images/150.png data/green/train/masks/150.png
-data/green/train/images/151.png data/green/train/masks/151.png
-data/green/train/images/1518.png data/green/train/masks/1518.png
-data/green/train/images/1521.png data/green/train/masks/1521.png
-data/green/train/images/1524.png data/green/train/masks/1524.png
-data/green/train/images/1525.png data/green/train/masks/1525.png
-data/green/train/images/1527.png data/green/train/masks/1527.png
-data/green/train/images/153.png data/green/train/masks/153.png
-data/green/train/images/154.png data/green/train/masks/154.png
-data/green/train/images/157.png data/green/train/masks/157.png
-data/green/train/images/159.png data/green/train/masks/159.png
-data/green/train/images/16.png data/green/train/masks/16.png
-data/green/train/images/162.png data/green/train/masks/162.png
-data/green/train/images/164.png data/green/train/masks/164.png
-data/green/train/images/1641.png data/green/train/masks/1641.png
-data/green/train/images/1646.png data/green/train/masks/1646.png
-data/green/train/images/1647.png data/green/train/masks/1647.png
-data/green/train/images/165.png data/green/train/masks/165.png
-data/green/train/images/168.png data/green/train/masks/168.png
-data/green/train/images/172.png data/green/train/masks/172.png
-data/green/train/images/1732.png data/green/train/masks/1732.png
-data/green/train/images/1737.png data/green/train/masks/1737.png
-data/green/train/images/1753.png data/green/train/masks/1753.png
-data/green/train/images/176.png data/green/train/masks/176.png
-data/green/train/images/177.png data/green/train/masks/177.png
-data/green/train/images/1784.png data/green/train/masks/1784.png
-data/green/train/images/1787.png data/green/train/masks/1787.png
-data/green/train/images/179.png data/green/train/masks/179.png
-data/green/train/images/1791.png data/green/train/masks/1791.png
-data/green/train/images/18.png data/green/train/masks/18.png
-data/green/train/images/180.png data/green/train/masks/180.png
-data/green/train/images/181.png data/green/train/masks/181.png
-data/green/train/images/184.png data/green/train/masks/184.png
-data/green/train/images/187.png data/green/train/masks/187.png
-data/green/train/images/189.png data/green/train/masks/189.png
-data/green/train/images/19.png data/green/train/masks/19.png
-data/green/train/images/190.png data/green/train/masks/190.png
-data/green/train/images/1906.png data/green/train/masks/1906.png
-data/green/train/images/191.png data/green/train/masks/191.png
-data/green/train/images/193.png data/green/train/masks/193.png
-data/green/train/images/194.png data/green/train/masks/194.png
-data/green/train/images/195.png data/green/train/masks/195.png
-data/green/train/images/198.png data/green/train/masks/198.png
-data/green/train/images/199.png data/green/train/masks/199.png
-data/green/train/images/200.png data/green/train/masks/200.png
-data/green/train/images/201.png data/green/train/masks/201.png
-data/green/train/images/202.png data/green/train/masks/202.png
-data/green/train/images/203.png data/green/train/masks/203.png
-data/green/train/images/205.png data/green/train/masks/205.png
-data/green/train/images/208.png data/green/train/masks/208.png
-data/green/train/images/21.png data/green/train/masks/21.png
-data/green/train/images/210.png data/green/train/masks/210.png
-data/green/train/images/211.png data/green/train/masks/211.png
-data/green/train/images/214.png data/green/train/masks/214.png
-data/green/train/images/215.png data/green/train/masks/215.png
-data/green/train/images/216.png data/green/train/masks/216.png
-data/green/train/images/220.png data/green/train/masks/220.png
-data/green/train/images/221.png data/green/train/masks/221.png
-data/green/train/images/222.png data/green/train/masks/222.png
-data/green/train/images/223.png data/green/train/masks/223.png
-data/green/train/images/227.png data/green/train/masks/227.png
-data/green/train/images/228.png data/green/train/masks/228.png
-data/green/train/images/229.png data/green/train/masks/229.png
-data/green/train/images/23.png data/green/train/masks/23.png
-data/green/train/images/230.png data/green/train/masks/230.png
-data/green/train/images/233.png data/green/train/masks/233.png
-data/green/train/images/234.png data/green/train/masks/234.png
-data/green/train/images/235.png data/green/train/masks/235.png
-data/green/train/images/236.png data/green/train/masks/236.png
-data/green/train/images/237.png data/green/train/masks/237.png
-data/green/train/images/238.png data/green/train/masks/238.png
-data/green/train/images/240.png data/green/train/masks/240.png
-data/green/train/images/245.png data/green/train/masks/245.png
-data/green/train/images/246.png data/green/train/masks/246.png
-data/green/train/images/247.png data/green/train/masks/247.png
-data/green/train/images/249.png data/green/train/masks/249.png
-data/green/train/images/25.png data/green/train/masks/25.png
-data/green/train/images/250.png data/green/train/masks/250.png
-data/green/train/images/251.png data/green/train/masks/251.png
-data/green/train/images/254.png data/green/train/masks/254.png
-data/green/train/images/257.png data/green/train/masks/257.png
-data/green/train/images/259.png data/green/train/masks/259.png
-data/green/train/images/26.png data/green/train/masks/26.png
-data/green/train/images/267.png data/green/train/masks/267.png
-data/green/train/images/269.png data/green/train/masks/269.png
-data/green/train/images/27.png data/green/train/masks/27.png
-data/green/train/images/271.png data/green/train/masks/271.png
-data/green/train/images/273.png data/green/train/masks/273.png
-data/green/train/images/275.png data/green/train/masks/275.png
-data/green/train/images/276.png data/green/train/masks/276.png
-data/green/train/images/277.png data/green/train/masks/277.png
-data/green/train/images/282.png data/green/train/masks/282.png
-data/green/train/images/286.png data/green/train/masks/286.png
-data/green/train/images/287.png data/green/train/masks/287.png
-data/green/train/images/290.png data/green/train/masks/290.png
-data/green/train/images/291.png data/green/train/masks/291.png
-data/green/train/images/292.png data/green/train/masks/292.png
-data/green/train/images/294.png data/green/train/masks/294.png
-data/green/train/images/295.png data/green/train/masks/295.png
-data/green/train/images/296.png data/green/train/masks/296.png
-data/green/train/images/298.png data/green/train/masks/298.png
-data/green/train/images/3.png data/green/train/masks/3.png
-data/green/train/images/304.png data/green/train/masks/304.png
-data/green/train/images/33.png data/green/train/masks/33.png
-data/green/train/images/36.png data/green/train/masks/36.png
-data/green/train/images/37.png data/green/train/masks/37.png
-data/green/train/images/39.png data/green/train/masks/39.png
-data/green/train/images/41.png data/green/train/masks/41.png
-data/green/train/images/42.png data/green/train/masks/42.png
-data/green/train/images/43.png data/green/train/masks/43.png
-data/green/train/images/44.png data/green/train/masks/44.png
-data/green/train/images/47.png data/green/train/masks/47.png
-data/green/train/images/49.png data/green/train/masks/49.png
-data/green/train/images/5.png data/green/train/masks/5.png
-data/green/train/images/52.png data/green/train/masks/52.png
-data/green/train/images/53.png data/green/train/masks/53.png
-data/green/train/images/54.png data/green/train/masks/54.png
-data/green/train/images/57.png data/green/train/masks/57.png
-data/green/train/images/59.png data/green/train/masks/59.png
-data/green/train/images/60.png data/green/train/masks/60.png
-data/green/train/images/61.png data/green/train/masks/61.png
-data/green/train/images/63.png data/green/train/masks/63.png
-data/green/train/images/66.png data/green/train/masks/66.png
-data/green/train/images/72.png data/green/train/masks/72.png
-data/green/train/images/73.png data/green/train/masks/73.png
-data/green/train/images/74.png data/green/train/masks/74.png
-data/green/train/images/76.png data/green/train/masks/76.png
-data/green/train/images/77.png data/green/train/masks/77.png
-data/green/train/images/79.png data/green/train/masks/79.png
-data/green/train/images/8.png data/green/train/masks/8.png
-data/green/train/images/81.png data/green/train/masks/81.png
-data/green/train/images/82.png data/green/train/masks/82.png
-data/green/train/images/85.png data/green/train/masks/85.png
-data/green/train/images/86.png data/green/train/masks/86.png
-data/green/train/images/87.png data/green/train/masks/87.png
-data/green/train/images/88.png data/green/train/masks/88.png
-data/green/train/images/89.png data/green/train/masks/89.png
-data/green/train/images/90.png data/green/train/masks/90.png
-data/green/train/images/97.png data/green/train/masks/97.png
-data/red/train/images/1911.png data/red/train/masks/1911.png
-data/red/train/images/1912.png data/red/train/masks/1912.png
-data/red/train/images/1914.png data/red/train/masks/1914.png
-data/red/train/images/1915.png data/red/train/masks/1915.png
-data/red/train/images/1917.png data/red/train/masks/1917.png
-data/red/train/images/1918.png data/red/train/masks/1918.png
-data/red/train/images/1919.png data/red/train/masks/1919.png
-data/red/train/images/1920.png data/red/train/masks/1920.png
-data/red/train/images/1923.png data/red/train/masks/1923.png
-data/red/train/images/1926.png data/red/train/masks/1926.png
-data/red/train/images/1927.png data/red/train/masks/1927.png
-data/red/train/images/1929.png data/red/train/masks/1929.png
-data/red/train/images/1930.png data/red/train/masks/1930.png
-data/red/train/images/1932.png data/red/train/masks/1932.png
-data/red/train/images/1936.png data/red/train/masks/1936.png
-data/red/train/images/1940.png data/red/train/masks/1940.png
-data/red/train/images/1941.png data/red/train/masks/1941.png
-data/red/train/images/308.png data/red/train/masks/308.png
-data/red/train/images/309.png data/red/train/masks/309.png
-data/red/train/images/310.png data/red/train/masks/310.png
-data/red/train/images/311.png data/red/train/masks/311.png
-data/red/train/images/314.png data/red/train/masks/314.png
-data/red/train/images/315.png data/red/train/masks/315.png
-data/red/train/images/316.png data/red/train/masks/316.png
-data/red/train/images/318.png data/red/train/masks/318.png
-data/red/train/images/319.png data/red/train/masks/319.png
-data/red/train/images/320.png data/red/train/masks/320.png
-data/red/train/images/323.png data/red/train/masks/323.png
-data/red/train/images/326.png data/red/train/masks/326.png
-data/red/train/images/327.png data/red/train/masks/327.png
-data/red/train/images/328.png data/red/train/masks/328.png
-data/red/train/images/329.png data/red/train/masks/329.png
-data/red/train/images/330.png data/red/train/masks/330.png
-data/red/train/images/333.png data/red/train/masks/333.png
-data/red/train/images/336.png data/red/train/masks/336.png
-data/red/train/images/340.png data/red/train/masks/340.png
-data/red/train/images/341.png data/red/train/masks/341.png
-data/red/train/images/342.png data/red/train/masks/342.png
-data/red/train/images/343.png data/red/train/masks/343.png
-data/red/train/images/344.png data/red/train/masks/344.png
-data/red/train/images/345.png data/red/train/masks/345.png
-data/red/train/images/346.png data/red/train/masks/346.png
-data/red/train/images/348.png data/red/train/masks/348.png
-data/red/train/images/350.png data/red/train/masks/350.png
-data/red/train/images/351.png data/red/train/masks/351.png
-data/red/train/images/354.png data/red/train/masks/354.png
-data/red/train/images/355.png data/red/train/masks/355.png
-data/red/train/images/356.png data/red/train/masks/356.png
-data/red/train/images/357.png data/red/train/masks/357.png
-data/red/train/images/358.png data/red/train/masks/358.png
-data/red/train/images/360.png data/red/train/masks/360.png
-data/red/train/images/361.png data/red/train/masks/361.png
-data/red/train/images/364.png data/red/train/masks/364.png
-data/red/train/images/369.png data/red/train/masks/369.png
-data/red/train/images/370.png data/red/train/masks/370.png
-data/red/train/images/371.png data/red/train/masks/371.png
-data/red/train/images/372.png data/red/train/masks/372.png
-data/red/train/images/374.png data/red/train/masks/374.png
-data/red/train/images/376.png data/red/train/masks/376.png
-data/red/train/images/378.png data/red/train/masks/378.png
-data/red/train/images/380.png data/red/train/masks/380.png
-data/red/train/images/381.png data/red/train/masks/381.png
-data/red/train/images/382.png data/red/train/masks/382.png
-data/red/train/images/383.png data/red/train/masks/383.png
-data/red/train/images/384.png data/red/train/masks/384.png
-data/red/train/images/385.png data/red/train/masks/385.png
-data/red/train/images/387.png data/red/train/masks/387.png
-data/red/train/images/390.png data/red/train/masks/390.png
-data/red/train/images/392.png data/red/train/masks/392.png
-data/red/train/images/421.png data/red/train/masks/421.png
-data/red/train/images/425.png data/red/train/masks/425.png
-data/red/train/images/431.png data/red/train/masks/431.png
-data/red/train/images/436.png data/red/train/masks/436.png
-data/red/train/images/439.png data/red/train/masks/439.png
-data/red/train/images/451.png data/red/train/masks/451.png
-data/red/train/images/460.png data/red/train/masks/460.png
-data/red/train/images/483.png data/red/train/masks/483.png
-data/red/train/images/486.png data/red/train/masks/486.png
-data/red/train/images/488.png data/red/train/masks/488.png
-data/red/train/images/492.png data/red/train/masks/492.png
-data/red/train/images/516.png data/red/train/masks/516.png
-data/red/train/images/529.png data/red/train/masks/529.png
-data/red/train/images/545.png data/red/train/masks/545.png
-data/red/train/images/575.png data/red/train/masks/575.png
-data/red/train/images/579.png data/red/train/masks/579.png
-data/red/train/images/613.png data/red/train/masks/613.png
-data/red/train/images/632.png data/red/train/masks/632.png
-data/red/train/images/639.png data/red/train/masks/639.png
-data/red/train/images/640.png data/red/train/masks/640.png
-data/red/train/images/653.png data/red/train/masks/653.png
-data/red/train/images/654.png data/red/train/masks/654.png
-data/red/train/images/682.png data/red/train/masks/682.png
-data/red/train/images/686.png data/red/train/masks/686.png
-data/red/train/images/708.png data/red/train/masks/708.png
-data/red/train/images/720.png data/red/train/masks/720.png
-data/red/train/images/739.png data/red/train/masks/739.png
-data/red/train/images/746.png data/red/train/masks/746.png
-data/red/train/images/773.png data/red/train/masks/773.png
-data/red/train/images/781.png data/red/train/masks/781.png
-data/red/train/images/783.png data/red/train/masks/783.png
-data/red/train/images/789.png data/red/train/masks/789.png
-data/red/train/images/795.png data/red/train/masks/795.png
-data/red/train/images/807.png data/red/train/masks/807.png
-data/red/train/images/809.png data/red/train/masks/809.png
-data/red/train/images/811.png data/red/train/masks/811.png
-data/red/train/images/812.png data/red/train/masks/812.png
-data/red/train/images/820.png data/red/train/masks/820.png
-data/red/train/images/836.png data/red/train/masks/836.png
-data/red/train/images/849.png data/red/train/masks/849.png
-data/red/train/images/863.png data/red/train/masks/863.png
-data/yellow/train/images/1000.png data/yellow/train/masks/1000.png
-data/yellow/train/images/1001.png data/yellow/train/masks/1001.png
-data/yellow/train/images/1002.png data/yellow/train/masks/1002.png
-data/yellow/train/images/1003.png data/yellow/train/masks/1003.png
-data/yellow/train/images/1004.png data/yellow/train/masks/1004.png
-data/yellow/train/images/1005.png data/yellow/train/masks/1005.png
-data/yellow/train/images/1006.png data/yellow/train/masks/1006.png
-data/yellow/train/images/1007.png data/yellow/train/masks/1007.png
-data/yellow/train/images/1008.png data/yellow/train/masks/1008.png
-data/yellow/train/images/1010.png data/yellow/train/masks/1010.png
-data/yellow/train/images/1011.png data/yellow/train/masks/1011.png
-data/yellow/train/images/1012.png data/yellow/train/masks/1012.png
-data/yellow/train/images/1013.png data/yellow/train/masks/1013.png
-data/yellow/train/images/1014.png data/yellow/train/masks/1014.png
-data/yellow/train/images/1017.png data/yellow/train/masks/1017.png
-data/yellow/train/images/1019.png data/yellow/train/masks/1019.png
-data/yellow/train/images/1020.png data/yellow/train/masks/1020.png
-data/yellow/train/images/1021.png data/yellow/train/masks/1021.png
-data/yellow/train/images/1022.png data/yellow/train/masks/1022.png
-data/yellow/train/images/1023.png data/yellow/train/masks/1023.png
-data/yellow/train/images/1024.png data/yellow/train/masks/1024.png
-data/yellow/train/images/1026.png data/yellow/train/masks/1026.png
-data/yellow/train/images/1027.png data/yellow/train/masks/1027.png
-data/yellow/train/images/1028.png data/yellow/train/masks/1028.png
-data/yellow/train/images/1029.png data/yellow/train/masks/1029.png
-data/yellow/train/images/1031.png data/yellow/train/masks/1031.png
-data/yellow/train/images/1032.png data/yellow/train/masks/1032.png
-data/yellow/train/images/1033.png data/yellow/train/masks/1033.png
-data/yellow/train/images/1034.png data/yellow/train/masks/1034.png
-data/yellow/train/images/1035.png data/yellow/train/masks/1035.png
-data/yellow/train/images/1036.png data/yellow/train/masks/1036.png
-data/yellow/train/images/1037.png data/yellow/train/masks/1037.png
-data/yellow/train/images/1038.png data/yellow/train/masks/1038.png
-data/yellow/train/images/1039.png data/yellow/train/masks/1039.png
-data/yellow/train/images/1040.png data/yellow/train/masks/1040.png
-data/yellow/train/images/1041.png data/yellow/train/masks/1041.png
-data/yellow/train/images/1042.png data/yellow/train/masks/1042.png
-data/yellow/train/images/1043.png data/yellow/train/masks/1043.png
-data/yellow/train/images/1044.png data/yellow/train/masks/1044.png
-data/yellow/train/images/1046.png data/yellow/train/masks/1046.png
-data/yellow/train/images/1047.png data/yellow/train/masks/1047.png
-data/yellow/train/images/1048.png data/yellow/train/masks/1048.png
-data/yellow/train/images/1049.png data/yellow/train/masks/1049.png
-data/yellow/train/images/1050.png data/yellow/train/masks/1050.png
-data/yellow/train/images/1051.png data/yellow/train/masks/1051.png
-data/yellow/train/images/1052.png data/yellow/train/masks/1052.png
-data/yellow/train/images/1053.png data/yellow/train/masks/1053.png
-data/yellow/train/images/1054.png data/yellow/train/masks/1054.png
-data/yellow/train/images/1056.png data/yellow/train/masks/1056.png
-data/yellow/train/images/1057.png data/yellow/train/masks/1057.png
-data/yellow/train/images/1058.png data/yellow/train/masks/1058.png
-data/yellow/train/images/1059.png data/yellow/train/masks/1059.png
-data/yellow/train/images/1061.png data/yellow/train/masks/1061.png
-data/yellow/train/images/1062.png data/yellow/train/masks/1062.png
-data/yellow/train/images/1063.png data/yellow/train/masks/1063.png
-data/yellow/train/images/1064.png data/yellow/train/masks/1064.png
-data/yellow/train/images/1065.png data/yellow/train/masks/1065.png
-data/yellow/train/images/1067.png data/yellow/train/masks/1067.png
-data/yellow/train/images/1068.png data/yellow/train/masks/1068.png
-data/yellow/train/images/1070.png data/yellow/train/masks/1070.png
-data/yellow/train/images/1071.png data/yellow/train/masks/1071.png
-data/yellow/train/images/1072.png data/yellow/train/masks/1072.png
-data/yellow/train/images/1074.png data/yellow/train/masks/1074.png
-data/yellow/train/images/1076.png data/yellow/train/masks/1076.png
-data/yellow/train/images/1077.png data/yellow/train/masks/1077.png
-data/yellow/train/images/1078.png data/yellow/train/masks/1078.png
-data/yellow/train/images/1079.png data/yellow/train/masks/1079.png
-data/yellow/train/images/1080.png data/yellow/train/masks/1080.png
-data/yellow/train/images/1081.png data/yellow/train/masks/1081.png
-data/yellow/train/images/1082.png data/yellow/train/masks/1082.png
-data/yellow/train/images/1083.png data/yellow/train/masks/1083.png
-data/yellow/train/images/1085.png data/yellow/train/masks/1085.png
-data/yellow/train/images/1087.png data/yellow/train/masks/1087.png
-data/yellow/train/images/1088.png data/yellow/train/masks/1088.png
-data/yellow/train/images/1089.png data/yellow/train/masks/1089.png
-data/yellow/train/images/1090.png data/yellow/train/masks/1090.png
-data/yellow/train/images/1091.png data/yellow/train/masks/1091.png
-data/yellow/train/images/1092.png data/yellow/train/masks/1092.png
-data/yellow/train/images/1094.png data/yellow/train/masks/1094.png
-data/yellow/train/images/1095.png data/yellow/train/masks/1095.png
-data/yellow/train/images/1096.png data/yellow/train/masks/1096.png
-data/yellow/train/images/1099.png data/yellow/train/masks/1099.png
-data/yellow/train/images/1100.png data/yellow/train/masks/1100.png
-data/yellow/train/images/1102.png data/yellow/train/masks/1102.png
-data/yellow/train/images/1103.png data/yellow/train/masks/1103.png
-data/yellow/train/images/1105.png data/yellow/train/masks/1105.png
-data/yellow/train/images/1106.png data/yellow/train/masks/1106.png
-data/yellow/train/images/1107.png data/yellow/train/masks/1107.png
-data/yellow/train/images/1108.png data/yellow/train/masks/1108.png
-data/yellow/train/images/1109.png data/yellow/train/masks/1109.png
-data/yellow/train/images/1110.png data/yellow/train/masks/1110.png
-data/yellow/train/images/1112.png data/yellow/train/masks/1112.png
-data/yellow/train/images/1113.png data/yellow/train/masks/1113.png
-data/yellow/train/images/1114.png data/yellow/train/masks/1114.png
-data/yellow/train/images/1115.png data/yellow/train/masks/1115.png
-data/yellow/train/images/1116.png data/yellow/train/masks/1116.png
-data/yellow/train/images/1118.png data/yellow/train/masks/1118.png
-data/yellow/train/images/1119.png data/yellow/train/masks/1119.png
-data/yellow/train/images/1120.png data/yellow/train/masks/1120.png
-data/yellow/train/images/1121.png data/yellow/train/masks/1121.png
-data/yellow/train/images/1122.png data/yellow/train/masks/1122.png
-data/yellow/train/images/1123.png data/yellow/train/masks/1123.png
-data/yellow/train/images/1124.png data/yellow/train/masks/1124.png
-data/yellow/train/images/1125.png data/yellow/train/masks/1125.png
-data/yellow/train/images/1126.png data/yellow/train/masks/1126.png
-data/yellow/train/images/1127.png data/yellow/train/masks/1127.png
-data/yellow/train/images/1128.png data/yellow/train/masks/1128.png
-data/yellow/train/images/1129.png data/yellow/train/masks/1129.png
-data/yellow/train/images/1130.png data/yellow/train/masks/1130.png
-data/yellow/train/images/1131.png data/yellow/train/masks/1131.png
-data/yellow/train/images/1132.png data/yellow/train/masks/1132.png
-data/yellow/train/images/1133.png data/yellow/train/masks/1133.png
-data/yellow/train/images/1134.png data/yellow/train/masks/1134.png
-data/yellow/train/images/1135.png data/yellow/train/masks/1135.png
-data/yellow/train/images/1136.png data/yellow/train/masks/1136.png
-data/yellow/train/images/1137.png data/yellow/train/masks/1137.png
-data/yellow/train/images/1139.png data/yellow/train/masks/1139.png
-data/yellow/train/images/1140.png data/yellow/train/masks/1140.png
-data/yellow/train/images/1142.png data/yellow/train/masks/1142.png
-data/yellow/train/images/1143.png data/yellow/train/masks/1143.png
-data/yellow/train/images/1145.png data/yellow/train/masks/1145.png
-data/yellow/train/images/1146.png data/yellow/train/masks/1146.png
-data/yellow/train/images/1147.png data/yellow/train/masks/1147.png
-data/yellow/train/images/1149.png data/yellow/train/masks/1149.png
-data/yellow/train/images/937.png data/yellow/train/masks/937.png
-data/yellow/train/images/938.png data/yellow/train/masks/938.png
-data/yellow/train/images/940.png data/yellow/train/masks/940.png
-data/yellow/train/images/941.png data/yellow/train/masks/941.png
-data/yellow/train/images/942.png data/yellow/train/masks/942.png
-data/yellow/train/images/943.png data/yellow/train/masks/943.png
-data/yellow/train/images/944.png data/yellow/train/masks/944.png
-data/yellow/train/images/946.png data/yellow/train/masks/946.png
-data/yellow/train/images/947.png data/yellow/train/masks/947.png
-data/yellow/train/images/948.png data/yellow/train/masks/948.png
-data/yellow/train/images/949.png data/yellow/train/masks/949.png
-data/yellow/train/images/950.png data/yellow/train/masks/950.png
-data/yellow/train/images/951.png data/yellow/train/masks/951.png
-data/yellow/train/images/952.png data/yellow/train/masks/952.png
-data/yellow/train/images/953.png data/yellow/train/masks/953.png
-data/yellow/train/images/955.png data/yellow/train/masks/955.png
-data/yellow/train/images/956.png data/yellow/train/masks/956.png
-data/yellow/train/images/959.png data/yellow/train/masks/959.png
-data/yellow/train/images/960.png data/yellow/train/masks/960.png
-data/yellow/train/images/961.png data/yellow/train/masks/961.png
-data/yellow/train/images/963.png data/yellow/train/masks/963.png
-data/yellow/train/images/964.png data/yellow/train/masks/964.png
-data/yellow/train/images/966.png data/yellow/train/masks/966.png
-data/yellow/train/images/967.png data/yellow/train/masks/967.png
-data/yellow/train/images/968.png data/yellow/train/masks/968.png
-data/yellow/train/images/970.png data/yellow/train/masks/970.png
-data/yellow/train/images/972.png data/yellow/train/masks/972.png
-data/yellow/train/images/973.png data/yellow/train/masks/973.png
-data/yellow/train/images/974.png data/yellow/train/masks/974.png
-data/yellow/train/images/975.png data/yellow/train/masks/975.png
-data/yellow/train/images/976.png data/yellow/train/masks/976.png
-data/yellow/train/images/979.png data/yellow/train/masks/979.png
-data/yellow/train/images/980.png data/yellow/train/masks/980.png
-data/yellow/train/images/981.png data/yellow/train/masks/981.png
-data/yellow/train/images/983.png data/yellow/train/masks/983.png
-data/yellow/train/images/985.png data/yellow/train/masks/985.png
-data/yellow/train/images/986.png data/yellow/train/masks/986.png
-data/yellow/train/images/988.png data/yellow/train/masks/988.png
-data/yellow/train/images/990.png data/yellow/train/masks/990.png
-data/yellow/train/images/991.png data/yellow/train/masks/991.png
-data/yellow/train/images/992.png data/yellow/train/masks/992.png
-data/yellow/train/images/993.png data/yellow/train/masks/993.png
-data/yellow/train/images/994.png data/yellow/train/masks/994.png
-data/yellow/train/images/996.png data/yellow/train/masks/996.png
-data/yellow/train/images/998.png data/yellow/train/masks/998.png
-data/yellow/train/images/999.png data/yellow/train/masks/999.png
+data/green/train/images/102.png
+data/green/train/images/104.png
+data/green/train/images/106.png
+data/green/train/images/107.png
+data/green/train/images/108.png
+data/green/train/images/11.png
+data/green/train/images/112.png
+data/green/train/images/113.png
+data/green/train/images/117.png
+data/green/train/images/119.png
+data/green/train/images/12.png
+data/green/train/images/120.png
+data/green/train/images/121.png
+data/green/train/images/123.png
+data/green/train/images/13.png
+data/green/train/images/131.png
+data/green/train/images/135.png
+data/green/train/images/136.png
+data/green/train/images/137.png
+data/green/train/images/139.png
+data/green/train/images/14.png
+data/green/train/images/142.png
+data/green/train/images/143.png
+data/green/train/images/144.png
+data/green/train/images/1445.png
+data/green/train/images/1448.png
+data/green/train/images/145.png
+data/green/train/images/146.png
+data/green/train/images/147.png
+data/green/train/images/148.png
+data/green/train/images/150.png
+data/green/train/images/151.png
+data/green/train/images/1518.png
+data/green/train/images/1521.png
+data/green/train/images/1524.png
+data/green/train/images/1525.png
+data/green/train/images/1527.png
+data/green/train/images/153.png
+data/green/train/images/154.png
+data/green/train/images/157.png
+data/green/train/images/159.png
+data/green/train/images/16.png
+data/green/train/images/162.png
+data/green/train/images/164.png
+data/green/train/images/1641.png
+data/green/train/images/1646.png
+data/green/train/images/1647.png
+data/green/train/images/165.png
+data/green/train/images/168.png
+data/green/train/images/172.png
+data/green/train/images/1732.png
+data/green/train/images/1737.png
+data/green/train/images/1753.png
+data/green/train/images/176.png
+data/green/train/images/177.png
+data/green/train/images/1784.png
+data/green/train/images/1787.png
+data/green/train/images/179.png
+data/green/train/images/1791.png
+data/green/train/images/18.png
+data/green/train/images/180.png
+data/green/train/images/181.png
+data/green/train/images/184.png
+data/green/train/images/187.png
+data/green/train/images/189.png
+data/green/train/images/19.png
+data/green/train/images/190.png
+data/green/train/images/1906.png
+data/green/train/images/191.png
+data/green/train/images/193.png
+data/green/train/images/194.png
+data/green/train/images/195.png
+data/green/train/images/198.png
+data/green/train/images/199.png
+data/green/train/images/200.png
+data/green/train/images/201.png
+data/green/train/images/202.png
+data/green/train/images/203.png
+data/green/train/images/205.png
+data/green/train/images/208.png
+data/green/train/images/21.png
+data/green/train/images/210.png
+data/green/train/images/211.png
+data/green/train/images/214.png
+data/green/train/images/215.png
+data/green/train/images/216.png
+data/green/train/images/220.png
+data/green/train/images/221.png
+data/green/train/images/222.png
+data/green/train/images/223.png
+data/green/train/images/227.png
+data/green/train/images/228.png
+data/green/train/images/229.png
+data/green/train/images/23.png
+data/green/train/images/230.png
+data/green/train/images/233.png
+data/green/train/images/234.png
+data/green/train/images/235.png
+data/green/train/images/236.png
+data/green/train/images/237.png
+data/green/train/images/238.png
+data/green/train/images/240.png
+data/green/train/images/245.png
+data/green/train/images/246.png
+data/green/train/images/247.png
+data/green/train/images/249.png
+data/green/train/images/25.png
+data/green/train/images/250.png
+data/green/train/images/251.png
+data/green/train/images/254.png
+data/green/train/images/257.png
+data/green/train/images/259.png
+data/green/train/images/26.png
+data/green/train/images/267.png
+data/green/train/images/269.png
+data/green/train/images/27.png
+data/green/train/images/271.png
+data/green/train/images/273.png
+data/green/train/images/275.png
+data/green/train/images/276.png
+data/green/train/images/277.png
+data/green/train/images/282.png
+data/green/train/images/286.png
+data/green/train/images/287.png
+data/green/train/images/290.png
+data/green/train/images/291.png
+data/green/train/images/292.png
+data/green/train/images/294.png
+data/green/train/images/295.png
+data/green/train/images/296.png
+data/green/train/images/298.png
+data/green/train/images/3.png
+data/green/train/images/304.png
+data/green/train/images/33.png
+data/green/train/images/36.png
+data/green/train/images/37.png
+data/green/train/images/39.png
+data/green/train/images/41.png
+data/green/train/images/42.png
+data/green/train/images/43.png
+data/green/train/images/44.png
+data/green/train/images/47.png
+data/green/train/images/49.png
+data/green/train/images/5.png
+data/green/train/images/52.png
+data/green/train/images/53.png
+data/green/train/images/54.png
+data/green/train/images/57.png
+data/green/train/images/59.png
+data/green/train/images/60.png
+data/green/train/images/61.png
+data/green/train/images/63.png
+data/green/train/images/66.png
+data/green/train/images/72.png
+data/green/train/images/73.png
+data/green/train/images/74.png
+data/green/train/images/76.png
+data/green/train/images/77.png
+data/green/train/images/79.png
+data/green/train/images/8.png
+data/green/train/images/81.png
+data/green/train/images/82.png
+data/green/train/images/85.png
+data/green/train/images/86.png
+data/green/train/images/87.png
+data/green/train/images/88.png
+data/green/train/images/89.png
+data/green/train/images/90.png
+data/green/train/images/97.png
+data/red/train/images/1911.png
+data/red/train/images/1912.png
+data/red/train/images/1914.png
+data/red/train/images/1915.png
+data/red/train/images/1917.png
+data/red/train/images/1918.png
+data/red/train/images/1919.png
+data/red/train/images/1920.png
+data/red/train/images/1923.png
+data/red/train/images/1926.png
+data/red/train/images/1927.png
+data/red/train/images/1929.png
+data/red/train/images/1930.png
+data/red/train/images/1932.png
+data/red/train/images/1936.png
+data/red/train/images/1940.png
+data/red/train/images/1941.png
+data/red/train/images/308.png
+data/red/train/images/309.png
+data/red/train/images/310.png
+data/red/train/images/311.png
+data/red/train/images/314.png
+data/red/train/images/315.png
+data/red/train/images/316.png
+data/red/train/images/318.png
+data/red/train/images/319.png
+data/red/train/images/320.png
+data/red/train/images/323.png
+data/red/train/images/326.png
+data/red/train/images/327.png
+data/red/train/images/328.png
+data/red/train/images/329.png
+data/red/train/images/330.png
+data/red/train/images/333.png
+data/red/train/images/336.png
+data/red/train/images/340.png
+data/red/train/images/341.png
+data/red/train/images/342.png
+data/red/train/images/343.png
+data/red/train/images/344.png
+data/red/train/images/345.png
+data/red/train/images/346.png
+data/red/train/images/348.png
+data/red/train/images/350.png
+data/red/train/images/351.png
+data/red/train/images/354.png
+data/red/train/images/355.png
+data/red/train/images/356.png
+data/red/train/images/357.png
+data/red/train/images/358.png
+data/red/train/images/360.png
+data/red/train/images/361.png
+data/red/train/images/364.png
+data/red/train/images/369.png
+data/red/train/images/370.png
+data/red/train/images/371.png
+data/red/train/images/372.png
+data/red/train/images/374.png
+data/red/train/images/376.png
+data/red/train/images/378.png
+data/red/train/images/380.png
+data/red/train/images/381.png
+data/red/train/images/382.png
+data/red/train/images/383.png
+data/red/train/images/384.png
+data/red/train/images/385.png
+data/red/train/images/387.png
+data/red/train/images/390.png
+data/red/train/images/392.png
+data/red/train/images/421.png
+data/red/train/images/425.png
+data/red/train/images/431.png
+data/red/train/images/436.png
+data/red/train/images/439.png
+data/red/train/images/451.png
+data/red/train/images/460.png
+data/red/train/images/483.png
+data/red/train/images/486.png
+data/red/train/images/488.png
+data/red/train/images/492.png
+data/red/train/images/516.png
+data/red/train/images/529.png
+data/red/train/images/545.png
+data/red/train/images/575.png
+data/red/train/images/579.png
+data/red/train/images/613.png
+data/red/train/images/632.png
+data/red/train/images/639.png
+data/red/train/images/640.png
+data/red/train/images/653.png
+data/red/train/images/654.png
+data/red/train/images/682.png
+data/red/train/images/686.png
+data/red/train/images/708.png
+data/red/train/images/720.png
+data/red/train/images/739.png
+data/red/train/images/746.png
+data/red/train/images/773.png
+data/red/train/images/781.png
+data/red/train/images/783.png
+data/red/train/images/789.png
+data/red/train/images/795.png
+data/red/train/images/807.png
+data/red/train/images/809.png
+data/red/train/images/811.png
+data/red/train/images/812.png
+data/red/train/images/820.png
+data/red/train/images/836.png
+data/red/train/images/849.png
+data/red/train/images/863.png
+data/yellow/train/images/1000.png
+data/yellow/train/images/1001.png
+data/yellow/train/images/1002.png
+data/yellow/train/images/1003.png
+data/yellow/train/images/1004.png
+data/yellow/train/images/1005.png
+data/yellow/train/images/1006.png
+data/yellow/train/images/1007.png
+data/yellow/train/images/1008.png
+data/yellow/train/images/1010.png
+data/yellow/train/images/1011.png
+data/yellow/train/images/1012.png
+data/yellow/train/images/1013.png
+data/yellow/train/images/1014.png
+data/yellow/train/images/1017.png
+data/yellow/train/images/1019.png
+data/yellow/train/images/1020.png
+data/yellow/train/images/1021.png
+data/yellow/train/images/1022.png
+data/yellow/train/images/1023.png
+data/yellow/train/images/1024.png
+data/yellow/train/images/1026.png
+data/yellow/train/images/1027.png
+data/yellow/train/images/1028.png
+data/yellow/train/images/1029.png
+data/yellow/train/images/1031.png
+data/yellow/train/images/1032.png
+data/yellow/train/images/1033.png
+data/yellow/train/images/1034.png
+data/yellow/train/images/1035.png
+data/yellow/train/images/1036.png
+data/yellow/train/images/1037.png
+data/yellow/train/images/1038.png
+data/yellow/train/images/1039.png
+data/yellow/train/images/1040.png
+data/yellow/train/images/1041.png
+data/yellow/train/images/1042.png
+data/yellow/train/images/1043.png
+data/yellow/train/images/1044.png
+data/yellow/train/images/1046.png
+data/yellow/train/images/1047.png
+data/yellow/train/images/1048.png
+data/yellow/train/images/1049.png
+data/yellow/train/images/1050.png
+data/yellow/train/images/1051.png
+data/yellow/train/images/1052.png
+data/yellow/train/images/1053.png
+data/yellow/train/images/1054.png
+data/yellow/train/images/1056.png
+data/yellow/train/images/1057.png
+data/yellow/train/images/1058.png
+data/yellow/train/images/1059.png
+data/yellow/train/images/1061.png
+data/yellow/train/images/1062.png
+data/yellow/train/images/1063.png
+data/yellow/train/images/1064.png
+data/yellow/train/images/1065.png
+data/yellow/train/images/1067.png
+data/yellow/train/images/1068.png
+data/yellow/train/images/1070.png
+data/yellow/train/images/1071.png
+data/yellow/train/images/1072.png
+data/yellow/train/images/1074.png
+data/yellow/train/images/1076.png
+data/yellow/train/images/1077.png
+data/yellow/train/images/1078.png
+data/yellow/train/images/1079.png
+data/yellow/train/images/1080.png
+data/yellow/train/images/1081.png
+data/yellow/train/images/1082.png
+data/yellow/train/images/1083.png
+data/yellow/train/images/1085.png
+data/yellow/train/images/1087.png
+data/yellow/train/images/1088.png
+data/yellow/train/images/1089.png
+data/yellow/train/images/1090.png
+data/yellow/train/images/1091.png
+data/yellow/train/images/1092.png
+data/yellow/train/images/1094.png
+data/yellow/train/images/1095.png
+data/yellow/train/images/1096.png
+data/yellow/train/images/1099.png
+data/yellow/train/images/1100.png
+data/yellow/train/images/1102.png
+data/yellow/train/images/1103.png
+data/yellow/train/images/1105.png
+data/yellow/train/images/1106.png
+data/yellow/train/images/1107.png
+data/yellow/train/images/1108.png
+data/yellow/train/images/1109.png
+data/yellow/train/images/1110.png
+data/yellow/train/images/1112.png
+data/yellow/train/images/1113.png
+data/yellow/train/images/1114.png
+data/yellow/train/images/1115.png
+data/yellow/train/images/1116.png
+data/yellow/train/images/1118.png
+data/yellow/train/images/1119.png
+data/yellow/train/images/1120.png
+data/yellow/train/images/1121.png
+data/yellow/train/images/1122.png
+data/yellow/train/images/1123.png
+data/yellow/train/images/1124.png
+data/yellow/train/images/1125.png
+data/yellow/train/images/1126.png
+data/yellow/train/images/1127.png
+data/yellow/train/images/1128.png
+data/yellow/train/images/1129.png
+data/yellow/train/images/1130.png
+data/yellow/train/images/1131.png
+data/yellow/train/images/1132.png
+data/yellow/train/images/1133.png
+data/yellow/train/images/1134.png
+data/yellow/train/images/1135.png
+data/yellow/train/images/1136.png
+data/yellow/train/images/1137.png
+data/yellow/train/images/1139.png
+data/yellow/train/images/1140.png
+data/yellow/train/images/1142.png
+data/yellow/train/images/1143.png
+data/yellow/train/images/1145.png
+data/yellow/train/images/1146.png
+data/yellow/train/images/1147.png
+data/yellow/train/images/1149.png
+data/yellow/train/images/937.png
+data/yellow/train/images/938.png
+data/yellow/train/images/940.png
+data/yellow/train/images/941.png
+data/yellow/train/images/942.png
+data/yellow/train/images/943.png
+data/yellow/train/images/944.png
+data/yellow/train/images/946.png
+data/yellow/train/images/947.png
+data/yellow/train/images/948.png
+data/yellow/train/images/949.png
+data/yellow/train/images/950.png
+data/yellow/train/images/951.png
+data/yellow/train/images/952.png
+data/yellow/train/images/953.png
+data/yellow/train/images/955.png
+data/yellow/train/images/956.png
+data/yellow/train/images/959.png
+data/yellow/train/images/960.png
+data/yellow/train/images/961.png
+data/yellow/train/images/963.png
+data/yellow/train/images/964.png
+data/yellow/train/images/966.png
+data/yellow/train/images/967.png
+data/yellow/train/images/968.png
+data/yellow/train/images/970.png
+data/yellow/train/images/972.png
+data/yellow/train/images/973.png
+data/yellow/train/images/974.png
+data/yellow/train/images/975.png
+data/yellow/train/images/976.png
+data/yellow/train/images/979.png
+data/yellow/train/images/980.png
+data/yellow/train/images/981.png
+data/yellow/train/images/983.png
+data/yellow/train/images/985.png
+data/yellow/train/images/986.png
+data/yellow/train/images/988.png
+data/yellow/train/images/990.png
+data/yellow/train/images/991.png
+data/yellow/train/images/992.png
+data/yellow/train/images/993.png
+data/yellow/train/images/994.png
+data/yellow/train/images/996.png
+data/yellow/train/images/998.png
+data/yellow/train/images/999.png
