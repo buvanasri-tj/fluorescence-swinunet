@@ -1,59 +1,57 @@
-# datasets/dataset_seg.py
 import os
+import glob
 from PIL import Image
 from torch.utils.data import Dataset
 import torchvision.transforms as T
+import torch
+
 
 class SegmentationDataset(Dataset):
-    """
-    Paired segmentation dataset:
-    Each line in list file:
-        path/to/image.png path/to/mask.png
-    """
-    def __init__(self, list_path, img_size=224):
-        self.samples = []
+    def __init__(self, root, split="train", image_size=256, augment=False):
+        self.root = root
+        self.split = split
+        self.image_size = image_size
+        self.augment = augment
 
-        with open(list_path, "r") as f:
-            for ln in f:
-                ln = ln.strip()
-                if not ln:
-                    continue
-                parts = ln.split()
-                if len(parts) != 2:
-                    continue
-                img, mask = parts
-                img = img.replace("\\", "/")
-                mask = mask.replace("\\", "/")
-                if os.path.exists(img) and os.path.exists(mask):
-                    self.samples.append((img, mask))
-                else:
-                    print(f"[WARN] Missing pair → {img} | {mask}")
+        # Directories for channels
+        self.green_img = os.path.join(root, "green", split, "images")
+        self.red_img = os.path.join(root, "red", split, "images")
+        self.yellow_img = os.path.join(root, "yellow", split, "images")
+        self.green_mask = os.path.join(root, "green", split, "masks")
 
-        if len(self.samples) == 0:
-            raise RuntimeError("No valid segmentation samples found.")
+        # Base on green image folder
+        self.ids = sorted([os.path.splitext(os.path.basename(f))[0]
+                           for f in glob.glob(os.path.join(self.green_img, "*.png"))])
 
-        self.t_img = T.Compose([
-            T.Resize((img_size, img_size)),
-            T.ToTensor(),
-            T.Normalize([0.5], [0.5])
+        self.img_transform = T.Compose([
+            T.Resize((image_size, image_size)),
+            T.ToTensor()
         ])
 
-        self.t_mask = T.Compose([
-            T.Resize((img_size, img_size), interpolation=Image.NEAREST),
+        self.mask_transform = T.Compose([
+            T.Resize((image_size, image_size), interpolation=T.InterpolationMode.NEAREST),
             T.ToTensor()
         ])
 
     def __len__(self):
-        return len(self.samples)
+        return len(self.ids)
+
+    def _load(self, path):
+        return Image.open(path).convert("L")
 
     def __getitem__(self, idx):
-        img_path, mask_path = self.samples[idx]
+        id_ = self.ids[idx]
 
-        img = Image.open(img_path).convert("L")
-        mask = Image.open(mask_path).convert("L")
+        g = self._load(os.path.join(self.green_img, f"{id_}.png"))
+        r = self._load(os.path.join(self.red_img, f"{id_}.png"))
+        y = self._load(os.path.join(self.yellow_img, f"{id_}.png"))
+        m = self._load(os.path.join(self.green_mask, f"{id_}.png"))
 
-        img = self.t_img(img)
-        mask = self.t_mask(mask)
-        mask = (mask > 0.5).float()
+        g = self.img_transform(g)
+        r = self.img_transform(r)
+        y = self.img_transform(y)
+        m = self.mask_transform(m)
 
-        return img, mask
+        rgb = torch.cat([g, r, y], dim=0)
+
+        return rgb, m
