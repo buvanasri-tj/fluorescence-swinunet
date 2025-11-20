@@ -1,21 +1,39 @@
 import numpy as np
 import cv2
 
-def binarize_mask(mask_tensor, threshold):
-    mask = mask_tensor.numpy()
-    mask = (mask > threshold).astype(np.uint8) * 255
-    return mask
 
-def mask_to_centroids(mask_tensor, threshold=0.5):
-    mask = (mask_tensor.numpy() > threshold).astype(np.uint8)
+def threshold_mask(prob_map, thresh=0.5):
+    """
+    prob_map: numpy array [0,1]
+    returns binary mask
+    """
+    return (prob_map > thresh).astype("uint8") * 255
+
+
+def contours_from_mask(mask):
+    """
+    mask: binary mask (0 or 255)
+    returns list of contours
+    """
     contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    return contours
 
-    centers = []
-    for c in contours:
-        M = cv2.moments(c)
-        if M["m00"] != 0:
-            cx = int(M["m10"]/M["m00"])
-            cy = int(M["m01"]/M["m00"])
-            centers.append((cx, cy))
 
-    return centers
+def bbox_from_contour(cnt):
+    x, y, w, h = cv2.boundingRect(cnt)
+    return x, y, w, h
+
+
+def overlay_mask(image, mask):
+    """
+    image: grayscale or RGB
+    mask: binary mask (0/255)
+    returns overlay image
+    """
+    if len(image.shape) == 2:
+        image = np.stack([image]*3, axis=-1)
+
+    overlay = image.copy()
+    overlay[..., 0] = np.maximum(overlay[..., 0], mask)
+
+    return overlay
