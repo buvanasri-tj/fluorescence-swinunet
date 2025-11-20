@@ -1,31 +1,62 @@
-# Simple YOLO-style dataset loader for bounding-box detection
 import os
+import glob
 import torch
-from torch.utils.data import Dataset
 from PIL import Image
+from torch.utils.data import Dataset
+import torchvision.transforms as T
+
 
 class DetectionDataset(Dataset):
-    def __init__(self, list_file, transform=None):
-        self.items = [x.strip() for x in open(list_file)]
-        self.transform = transform
+    def __init__(self, root, split="train", image_size=512):
+        self.root = root
+        self.split = split
+        self.image_size = image_size
 
-    def __len__(self):
-        return len(self.items)
+        self.green_img  = os.path.join(root, "green",  split, "images")
+        self.red_img    = os.path.join(root, "red",    split, "images")
+        self.yellow_img = os.path.join(root, "yellow", split, "images")
+        self.label_dir  = os.path.join(root, "detection_labels", split)
 
-    def __getitem__(self, idx):
-        img_path = self.items[idx]
-        label_path = img_path.replace("images", "labels").replace(".png", ".txt")
+        self.ids = sorted([
+            os.path.splitext(os.path.basename(f))[0]
+            for f in glob.glob(os.path.join(self.green_img, "*.png"))
+        ])
 
-        img = Image.open(img_path).convert("RGB")
+        self.tf = T.Compose([
+            T.Resize((image_size, image_size)),
+            T.ToTensor()
+        ])
+
+    def _load_gray(self, p):
+        return Image.open(p).convert("L")
+
+    def _load_labels(self, id_):
+        p = os.path.join(self.label_dir, id_ + ".txt")
+        if not os.path.exists(p):
+            return torch.zeros((0,5), dtype=torch.float32)
 
         boxes = []
-        if os.path.exists(label_path):
-            with open(label_path) as f:
-                for line in f:
-                    cls, x, y, w, h = map(float, line.split())
-                    boxes.append([cls, x, y, w, h])
+        with open(p) as f:
+            for line in f:
+                c, x, y, w, h = line.strip().split()
+                boxes.append([float(c), float(x), float(y), float(w), float(h)])
+        return torch.tensor(boxes, dtype=torch.float32)
 
-        if self.transform:
-            img = self.transform(img)
+    def __len__(self):
+        return len(self.ids)
 
-        return img, torch.tensor(boxes), img_path
+    def __getitem__(self, idx):
+        id_ = self.ids[idx]
+
+        g = self._load_gray(os.path.join(self.green_img,  f"{id_}.png"))
+        r = self._load_gray(os.path.join(self.red_img,    f"{id_}.png"))
+        y = self._load_gray(os.path.join(self.yellow_img, f"{id_}.png"))
+
+        g = self.tf(g)
+        r = self.tf(r)
+        y = self.tf(y)
+
+        img = torch.cat([g, r, y], dim=0)
+        labels = self._load_labels(id_)
+
+        return img, labels
