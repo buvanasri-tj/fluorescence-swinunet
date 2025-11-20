@@ -1,0 +1,4 @@
+# configs/counting.yaml
+segmentation_threshold: 0.5
+min_area: 20          # px - filter tiny objects
+connectivity: 8
