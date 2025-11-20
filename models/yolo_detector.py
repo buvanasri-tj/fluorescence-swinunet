@@ -1,7 +1,16 @@
-# models/yolo_detector.py
-# thin wrapper if you want to launch Ultralytics YOLOv8 programmatically
-from pathlib import Path
-def train_yolo(cfg_path):
-    # use command-line training or import ultralytics
-    # Example: `ultralytics` package training may be used
-    pass
+# You can replace this with YOLOv8/YOLOv11 internals later
+import torch.nn as nn
+
+class DummyYOLO(nn.Module):
+    def __init__(self, num_classes=1):
+        super().__init__()
+        self.backbone = nn.Sequential(
+            nn.Conv2d(3,16,3,1,1),
+            nn.ReLU(),
+            nn.Conv2d(16,32,3,1,1),
+            nn.ReLU(),
+        )
+        self.head = nn.Conv2d(32, num_classes*5, 1)
+
+    def forward(self,x):
+        return self.head(self.backbone(x))
