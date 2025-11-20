@@ -1,69 +1,31 @@
-import os
 import torch
-import torch.nn as nn
+from models.swinunet import SwinUNet
+from datasets.dataset_seg import SegmentationDataset
 from torch.utils.data import DataLoader
 from PIL import Image
-import numpy as np
-
-from datasets.dataset_fluo import FluoDataset
-from networks.swin_transformer_unet_skip_expand_decoder_sys import SwinTransformerSys
-from utils.data_utils import overlay_mask_on_image
+import os
 
 
-TEST_LIST = "datasets/test_list.txt"
-IMG_SIZE = 224
-BATCH_SIZE = 1
-CHECKPOINT = "results/checkpoints/epoch_50.pth"   # ← change if needed
+def main():
+    root = "data"
+    device = "cuda" if torch.cuda.is_available() else "cpu"
 
-SAVE_DIR = "results/segmentation"
-
-
-def save_prediction(image, mask_pred, name):
-    os.makedirs(SAVE_DIR, exist_ok=True)
-
-    mask_pred_img = Image.fromarray(mask_pred.astype(np.uint8) * 255)
-    mask_pred_img.save(os.path.join(SAVE_DIR, f"{name}_mask.png"))
-
-    overlay = overlay_mask_on_image(image, mask_pred)
-    overlay.save(os.path.join(SAVE_DIR, f"{name}_overlay.png"))
-
-
-def inference(model, loader):
+    model = SwinUNet(in_channels=3, num_classes=1)
+    model.load_state_dict(torch.load("checkpoints/seg_epoch_49.pth", map_location=device))
+    model.to(device)
     model.eval()
 
+    test_ds = SegmentationDataset(root, split="test", image_size=256)
+    test_loader = DataLoader(test_ds, batch_size=1)
+
+    os.makedirs("predictions", exist_ok=True)
+
     with torch.no_grad():
-        for idx, (img, _) in enumerate(loader):
-            img_cuda = img.cuda()
-            pred = model(img_cuda)
-            pred = torch.sigmoid(pred).squeeze().cpu().numpy()
-
-            mask_pred = (pred > 0.5).astype(np.uint8)
-
-            img_np = img[0].squeeze().numpy()
-
-            save_prediction(img_np, mask_pred, f"sample_{idx}")
+        for i, (img, _) in enumerate(test_loader):
+            img = img.to(device)
+            pred = torch.sigmoid(model(img))[0][0].cpu().numpy() * 255
+            Image.fromarray(pred.astype("uint8")).save(f"predictions/{i}.png")
 
 
 if __name__ == "__main__":
-    print("Loading test dataset...")
-    test_dataset = FluoDataset(
-        TEST_LIST,
-        img_size=IMG_SIZE,
-        allow_missing_mask=True  # ← important for real test images (no masks)
-    )
-    test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
-
-    print("Loading model...")
-    model = SwinTransformerSys(img_size=IMG_SIZE, num_classes=1)
-    model.cuda()
-
-    if not os.path.exists(CHECKPOINT):
-        raise FileNotFoundError(f"Checkpoint not found: {CHECKPOINT}")
-
-    model.load_state_dict(torch.load(CHECKPOINT))
-    print(f"Loaded checkpoint: {CHECKPOINT}")
-
-    print("Running inference...")
-    inference(model, test_loader)
-
-    print(f"Predictions saved in: {SAVE_DIR}")
+    main()
