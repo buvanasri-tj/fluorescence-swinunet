@@ -4,6 +4,7 @@ model:
   name: "SwinUNet"
   in_channels: 3
   num_classes: 2
+  pretrained_ckpt: "pretrained/swin_pretrained.pth"
 
 training:
   epochs: 100
