@@ -3,9 +3,8 @@ from torch.utils.data import DataLoader
 from models.swinunet import SwinUNet
 from datasets.dataset_seg import SegmentationDataset
 from scripts.trainer import SegmentationTrainer
-import torch.nn.functional as F
 import torch.nn as nn
-
+import os
 
 def main():
     root = "data"
@@ -21,23 +20,28 @@ def main():
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
     criterion = nn.BCEWithLogitsLoss()
 
-    trainer = SegmentationTrainer(model, optimizer, criterion, device)
+    resume_path = "checkpoints/swinunet_last.pth"
 
-    for epoch in range(50):
-        train_losses = []
-        for batch in train_loader:
-            loss = trainer.train_step(batch)
-            train_losses.append(loss)
+    trainer = SegmentationTrainer(
+        model=model,
+        optimizer=optimizer,
+        criterion=criterion,
+        device=device,
+        resume_path=resume_path,
+        save_path="checkpoints/swinunet_last.pth"
+    )
 
-        val_losses = []
-        for batch in val_loader:
-            loss = trainer.val_step(batch)
-            val_losses.append(loss)
+    start_epoch = trainer.start_epoch
 
-        print(f"Epoch {epoch}: Train {sum(train_losses)/len(train_losses):.4f}, "
-              f"Val {sum(val_losses)/len(val_losses):.4f}")
+    for epoch in range(start_epoch, 50):
+        train_losses = [trainer.train_step(b) for b in train_loader]
+        val_losses = [trainer.val_step(b) for b in val_loader]
 
-        torch.save(model.state_dict(), f"checkpoints/seg_epoch_{epoch}.pth")
+        print(f"Epoch {epoch}: "
+              f"Train={sum(train_losses)/len(train_losses):.4f}, "
+              f"Val={sum(val_losses)/len(val_losses):.4f}")
+
+        trainer.save_checkpoint(epoch)
 
 
 if __name__ == "__main__":
