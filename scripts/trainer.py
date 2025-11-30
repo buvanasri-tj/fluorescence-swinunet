@@ -1,41 +1,56 @@
 import torch
-import torch.nn as nn
 import os
-from utils.metrics import dice_score
 
-bce = nn.BCEWithLogitsLoss()
+class SegmentationTrainer:
+    def __init__(self, model, optimizer, criterion, device,
+                 resume_path=None, save_path="checkpoints/swinunet_last.pth"):
+        self.model = model
+        self.optimizer = optimizer
+        self.criterion = criterion
+        self.device = device
+        self.save_path = save_path
 
-def train_one_epoch(model, loader, optimizer, epoch, out_dir):
-    model.train()
+        self.start_epoch = 0
 
-    epoch_loss = 0.0
-    epoch_dice = 0.0
+        # Resume training
+        if resume_path and os.path.exists(resume_path):
+            ckpt = torch.load(resume_path)
+            self.model.load_state_dict(ckpt["model"])
+            self.optimizer.load_state_dict(ckpt["optimizer"])
+            self.start_epoch = ckpt["epoch"] + 1
+            print(f"[SegmentationTrainer] Resuming from epoch {self.start_epoch}")
 
-    for step, (img, mask) in enumerate(loader):
-        img = img.cuda()
-        mask = mask.cuda()
+    def train_step(self, batch):
+        self.model.train()
+        img, mask = batch
+        img, mask = img.to(self.device), mask.to(self.device)
 
-        optimizer.zero_grad()
+        pred = self.model(img)
+        loss = self.criterion(pred, mask)
 
-        pred = model(img)
-
-        bce_loss = bce(pred, mask)
-        dice = dice_score(pred, mask)
-
-        loss = bce_loss + (1 - dice)
-
+        self.optimizer.zero_grad()
         loss.backward()
-        optimizer.step()
+        self.optimizer.step()
 
-        epoch_loss += loss.item()
-        epoch_dice += dice
+        return loss.item()
 
-        if step % 20 == 0:
-            print(f"Epoch {epoch} | Step {step}/{len(loader)} "
-                  f"| Loss: {loss.item():.4f} | Dice: {dice:.4f}")
+    def val_step(self, batch):
+        self.model.eval()
+        img, mask = batch
+        img, mask = img.to(self.device), mask.to(self.device)
 
-    # Save model checkpoint
-    os.makedirs(out_dir, exist_ok=True)
-    torch.save(model.state_dict(), os.path.join(out_dir, f"epoch_{epoch}.pth"))
+        with torch.no_grad():
+            pred = self.model(img)
+            loss = self.criterion(pred, mask)
 
-    return epoch_loss / len(loader), epoch_dice / len(loader)
+        return loss.item()
+
+    def save_checkpoint(self, epoch):
+        ckpt = {
+            "epoch": epoch,
+            "model": self.model.state_dict(),
+            "optimizer": self.optimizer.state_dict(),
+        }
+        os.makedirs(os.path.dirname(self.save_path), exist_ok=True)
+        torch.save(ckpt, self.save_path)
+        print(f"[SegmentationTrainer] Saved checkpoint at epoch {epoch}")
