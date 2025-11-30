@@ -1,5 +1,5 @@
-import sys, os
-# Add repo root to PYTHONPATH
+import os, sys
+# Fix import path to repo root
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import torch
@@ -8,7 +8,6 @@ from models.swinunet import SwinUNet
 from datasets.dataset_seg import SegmentationDataset
 from scripts.trainer import SegmentationTrainer
 import torch.nn as nn
-
 
 def main():
     root = "data"
@@ -46,7 +45,6 @@ def main():
               f"Val={sum(val_losses)/len(val_losses):.4f}")
 
         trainer.save_checkpoint(epoch)
-
 
 if __name__ == "__main__":
     main()
