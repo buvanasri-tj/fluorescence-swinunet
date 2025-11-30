@@ -1,4 +1,5 @@
 import sys, os
+# Add repo root to PYTHONPATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import torch
@@ -7,7 +8,7 @@ from models.swinunet import SwinUNet
 from datasets.dataset_seg import SegmentationDataset
 from scripts.trainer import SegmentationTrainer
 import torch.nn as nn
-import os
+
 
 def main():
     root = "data"
