@@ -98,7 +98,8 @@ if __name__ == "__main__":
     args = parse_args()
 
     print("[INFO] Loading model...")
-    model = SwinUNet(in_channels=1, num_classes=1).cuda()
+    model = SwinUNet(in_channels=3, num_classes=1).cuda()
+
 
     print(f"[INFO] Loading checkpoint: {args.checkpoint}")
     state = torch.load(args.checkpoint, map_location="cuda")
