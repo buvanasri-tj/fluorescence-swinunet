@@ -3,6 +3,7 @@ import sys
 import argparse
 import yaml
 import torch
+import csv
 from torch.utils.data import DataLoader
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
