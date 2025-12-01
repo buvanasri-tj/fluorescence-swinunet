@@ -22,7 +22,7 @@ def train_one_epoch(model, loader, optimizer, epoch, out_dir):
         bce_loss = bce(pred, mask)
         dice = dice_score(pred, mask)
 
-        loss = bce_loss + (1 - dice)
+        loss = 0.6 * bce_loss + 0.4 * (1 - dice)
 
         loss.backward()
         optimizer.step()
