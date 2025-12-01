@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # Model config
     # -------------------------
     mcfg = cfg["model"]
-    in_ch = int(mcfg.get("in_channels", 3))
+    in_ch = int(mcfg.get("in_channels", 1))
     n_classes = int(mcfg.get("num_classes", 1))
     img_size = int(cfg["dataset"].get("image_size", 224))
 
