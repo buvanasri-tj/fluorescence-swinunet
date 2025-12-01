@@ -1,3 +1,4 @@
+# scripts/train_segmentation.py
 import os
 import sys
 import argparse
@@ -34,75 +35,47 @@ if __name__ == "__main__":
 
     os.makedirs(args.output_dir, exist_ok=True)
 
-    # -------------------------
-    # Model config
-    # -------------------------
-    mcfg = cfg["model"]
-    in_ch = int(mcfg.get("in_channels", 1))
-    n_classes = int(mcfg.get("num_classes", 1))
-    img_size = int(cfg["dataset"].get("image_size", 224))
+    # ---------------------------------------------------
+    # MODEL
+    # ---------------------------------------------------
+    model = SwinUNet(in_channels=3, num_classes=1).to(device)
 
-    print("\n[INFO] Creating model…")
-    model = SwinUNet(in_channels=in_ch,
-                     num_classes=n_classes,
-                     img_size=img_size).to(device)
-
-    # -------------------------
-    # Pretrained weights
-    # -------------------------
-    if mcfg.get("pretrained_ckpt"):
-        pre_ckpt = os.path.join(ROOT, mcfg["pretrained_ckpt"])
-        if os.path.exists(pre_ckpt):
-            print(f"[INFO] Loading pretrained weights from {pre_ckpt}")
-            state = torch.load(pre_ckpt, map_location=device)
+    pre_ckpt = cfg["model"].get("pretrained_ckpt", None)
+    if pre_ckpt:
+        ckpt_path = os.path.join(ROOT, pre_ckpt)
+        if os.path.exists(ckpt_path):
+            print(f"[INFO] Loading pretrained weights from {ckpt_path}")
+            state = torch.load(ckpt_path, map_location=device)
             model.load_state_dict(state, strict=False)
-        else:
-            print(f"[WARN] Pretrained checkpoint not found: {pre_ckpt}")
 
-    # -------------------------
-    # Dataset
-    # -------------------------
+    # ---------------------------------------------------
+    # DATASET
+    # ---------------------------------------------------
     dcfg = cfg["dataset"]
     root_dir = dcfg["root_dir"]
+    img_size = int(dcfg["image_size"])
 
-    print(f"[INFO] Loading dataset from: {root_dir}")
+    print(f"[INFO] Loading dataset from {root_dir}")
     train_ds = SegmentationDataset(root_dir, split="train", image_size=img_size)
-
     train_loader = DataLoader(
         train_ds,
-        batch_size=int(cfg["training"]["batch_size"]),
+        batch_size=cfg["training"]["batch_size"],
         shuffle=True,
-        num_workers=2
+        num_workers=2,
     )
 
-    print(f"[INFO] Loaded {len(train_ds)} training samples")
+    # ---------------------------------------------------
+    # OPTIMIZER
+    # ---------------------------------------------------
+    lr = float(cfg["training"]["learning_rate"])
+    weight_decay = float(cfg["training"]["weight_decay"])
+    epochs = int(cfg["training"]["epochs"])
 
-    # -------------------------
-    # Optimizer
-    # -------------------------
-    tcfg = cfg["training"]
-    lr = float(tcfg["learning_rate"])
-    weight_decay = float(tcfg["weight_decay"])
-    epochs = int(tcfg["epochs"])
+    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
 
-    print(f"[INFO] LR={lr}, WeightDecay={weight_decay}, Epochs={epochs}")
-
-    optimizer = torch.optim.AdamW(model.parameters(),
-                                  lr=lr,
-                                  weight_decay=weight_decay)
-
-    # -------------------------
-    # Training
-    # -------------------------
-    print("\n[INFO] Starting training...")
+    print("\n[INFO] Starting training...\n")
     for epoch in range(epochs):
-        loss, dice = train_one_epoch(
-            model,
-            train_loader,
-            optimizer,
-            epoch,
-            args.output_dir
-        )
+        loss, dice = train_one_epoch(model, train_loader, optimizer, epoch, args.output_dir)
         print(f"[EPOCH {epoch}] Loss={loss:.4f} | Dice={dice:.4f}")
 
-    print("\n[INFO] Training completed.")
+    print("\n[INFO] Training Complete!")
