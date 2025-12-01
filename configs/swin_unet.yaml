@@ -2,7 +2,7 @@ experiment_name: "swinunet_segmentation"
 
 model:
   name: "SwinUNet"
-  in_channels: 3
+  in_channels: 1
   num_classes: 2
   pretrained_ckpt: "pretrained/swin_tiny_patch4_window7_224.pth"
 
