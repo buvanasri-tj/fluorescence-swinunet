@@ -1,4 +1,3 @@
-# scripts/train_segmentation.py
 import os
 import sys
 import argparse
@@ -6,12 +5,14 @@ import yaml
 import torch
 from torch.utils.data import DataLoader
 
-# --- Make repo root importable ---
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ==========================================================
+# BULLETPROOF FIX: Ensure repo root is first in Python path
+# ==========================================================
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if ROOT not in sys.path:
-    sys.path.append(ROOT)
+    sys.path.insert(0, ROOT)
+# ==========================================================
 
-# --- Local imports (now resolvable) ---
 from models.swinunet import SwinUNet
 from datasets.dataset_seg import SegmentationDataset
 from scripts.trainer import train_one_epoch
