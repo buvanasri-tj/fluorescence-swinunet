@@ -1,58 +1,50 @@
 import os
-import glob
-import torch
+import numpy as np
 from PIL import Image
 from torch.utils.data import Dataset
 import torchvision.transforms as T
 
+class FluoDataset(Dataset):
+    """
+    Custom dataset class for PNG fluorescence microscopy images.
+    Reads (image, mask) pairs from train_list.txt or test_list.txt.
+    """
 
-class SegmentationDataset(Dataset):
-    def __init__(self, root, split="train", image_size=256, augment=False):
-        self.root = root
-        self.split = split
-        self.image_size = image_size
-        self.augment = augment
+    def __init__(self, list_path, img_size=224, num_classes=2):
+        self.img_size = img_size
+        self.num_classes = num_classes
 
-        # channel folders
-        self.green_img  = os.path.join(root, "green",  split, "images")
-        self.red_img    = os.path.join(root, "red",    split, "images")
-        self.yellow_img = os.path.join(root, "yellow", split, "images")
-        self.mask_dir   = os.path.join(root, "green",  split, "masks")
+        with open(list_path, "r") as f:
+            self.samples = [line.strip().split() for line in f.readlines()]
 
-        self.ids = sorted([
-            os.path.splitext(os.path.basename(f))[0]
-            for f in glob.glob(os.path.join(self.green_img, "*.png"))
+        # Basic augmentations
+        self.transform_img = T.Compose([
+            T.Resize((img_size, img_size)),
+            T.ToTensor(),
+            T.Normalize(mean=[0.5], std=[0.5]),
         ])
 
-        self.img_tf = T.Compose([
-            T.Resize((image_size, image_size)),
+        self.transform_mask = T.Compose([
+            T.Resize((img_size, img_size), interpolation=Image.NEAREST),
             T.ToTensor()
         ])
-
-        self.mask_tf = T.Compose([
-            T.Resize((image_size, image_size), interpolation=T.InterpolationMode.NEAREST),
-            T.ToTensor()
-        ])
-
-    def _load_gray(self, path):
-        return Image.open(path).convert("L")
 
     def __len__(self):
-        return len(self.ids)
+        return len(self.samples)
 
-    def __getitem__(self, idx):
-        id_ = self.ids[idx]
+    def __getitem__(self, index):
+        img_path, mask_path = self.samples[index]
 
-        g = self._load_gray(os.path.join(self.green_img,  f"{id_}.png"))
-        r = self._load_gray(os.path.join(self.red_img,    f"{id_}.png"))
-        y = self._load_gray(os.path.join(self.yellow_img, f"{id_}.png"))
-        m = self._load_gray(os.path.join(self.mask_dir,   f"{id_}.png"))
+        # Load grayscale PNG fluorescence image
+        img = Image.open(img_path).convert("L")
 
-        g = self.img_tf(g)
-        r = self.img_tf(r)
-        y = self.img_tf(y)
-        m = self.mask_tf(m)
+        # Load binary mask
+        mask = Image.open(mask_path).convert("L")
 
-        img = torch.cat([g, r, y], dim=0)
+        img = self.transform_img(img)
+        mask = self.transform_mask(mask)
 
-        return img, m
+        # Convert mask from {0,255} → {0,1}
+        mask = (mask > 0.5).float()
+
+        return img, mask
