@@ -77,6 +77,8 @@ if __name__ == "__main__":
     lr = cfg["training"]["learning_rate"]
     wd = cfg["training"]["weight_decay"]
     epochs = cfg["training"]["epochs"]
+    batch_size = cfg["training"]["batch_size"]
+
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=wd)
 
