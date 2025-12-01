@@ -1,19 +1,17 @@
 import os
-import numpy as np
 from PIL import Image
 from torch.utils.data import Dataset
 import torchvision.transforms as T
 
+
 class SegmentationDataset(Dataset):
     """
-    Loads all fluorescence images from:
-        data/green/train/images/
-        data/red/train/images/
-        data/yellow/train/images/
+    Loads fluorescence images + masks from:
 
-    Same for masks.
+        data/<color>/<split>/images/
+        data/<color>/<split>/masks/
 
-    This dataset automatically scans all 3 colors.
+    Supports 3 colors: green, red, yellow.
     """
 
     def __init__(self, root_dir, split="train", image_size=224):
@@ -21,38 +19,37 @@ class SegmentationDataset(Dataset):
         self.split = split
         self.image_size = image_size
 
-        # COLOR CHANNEL FOLDERS
         self.colors = ["green", "red", "yellow"]
-
         self.samples = []
 
+        # Scan all color folders
         for color in self.colors:
             img_dir = os.path.join(root_dir, color, split, "images")
             mask_dir = os.path.join(root_dir, color, split, "masks")
 
             if not os.path.isdir(img_dir):
-                print(f"[WARN] Missing folder: {img_dir}, skipping...")
+                print(f"[WARN] Missing: {img_dir}")
                 continue
 
             for fname in sorted(os.listdir(img_dir)):
                 img_path = os.path.join(img_dir, fname)
                 mask_path = os.path.join(mask_dir, fname)
 
-                if os.path.exists(img_path) and os.path.exists(mask_path):
+                if os.path.exists(mask_path):
                     self.samples.append((img_path, mask_path))
                 else:
                     print(f"[WARN] Missing mask for {img_path}")
 
-        print(f"[INFO] Loaded {len(self.samples)} samples from all channels ({split})")
+        print(f"[INFO] Loaded {len(self.samples)} samples ({split})")
 
-        # TRANSFORMS
-        self.transform_img = T.Compose([
+        # Transforms
+        self.t_img = T.Compose([
             T.Resize((image_size, image_size)),
             T.ToTensor(),
-            T.Normalize(mean=[0.5], std=[0.5]),
+            T.Normalize(mean=[0.5], std=[0.5])
         ])
 
-        self.transform_mask = T.Compose([
+        self.t_mask = T.Compose([
             T.Resize((image_size, image_size), interpolation=Image.NEAREST),
             T.ToTensor()
         ])
@@ -66,9 +63,10 @@ class SegmentationDataset(Dataset):
         img = Image.open(img_path).convert("L")
         mask = Image.open(mask_path).convert("L")
 
-        img = self.transform_img(img)
-        mask = self.transform_mask(mask)
+        img = self.t_img(img)
+        mask = self.t_mask(mask)
 
+        # convert mask to {0,1}
         mask = (mask > 0.5).float()
 
         return img, mask
