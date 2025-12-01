@@ -7,7 +7,7 @@ model:
   pretrained_ckpt: "pretrained/swin_tiny_patch4_window7_224.pth"
 
 training:
-  epochs: 100
+  epochs: 150
   batch_size: 4
   learning_rate: 5e-5
   weight_decay: 1e-5
