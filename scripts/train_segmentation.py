@@ -74,10 +74,10 @@ if __name__ == "__main__":
     # ------------------------------
     # OPTIMIZER & TRAINING PARAMS
     # ------------------------------
-    lr = cfg["training"]["learning_rate"]
-    wd = cfg["training"]["weight_decay"]
-    epochs = cfg["training"]["epochs"]
-    batch_size = cfg["training"]["batch_size"]
+    lr = float(cfg["training"]["learning_rate"])
+    wd = float(cfg["training"]["weight_decay"])
+    epochs = int(cfg["training"]["epochs"])
+    batch_size = int(cfg["training"]["batch_size"])
 
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=wd)
