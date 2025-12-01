@@ -16,7 +16,7 @@ training:
 
 dataset:
   root_dir: "data/"
-  image_size: 256
+  image_size: 224
   augmentations: true
 
 paths:
