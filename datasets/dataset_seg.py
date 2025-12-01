@@ -4,7 +4,7 @@ from PIL import Image
 from torch.utils.data import Dataset
 import torchvision.transforms as T
 
-class FluoDataset(Dataset):
+class SegmentationDataset(Dataset):
     """
     Custom dataset class for PNG fluorescence microscopy images.
     Reads (image, mask) pairs from train_list.txt or test_list.txt.
