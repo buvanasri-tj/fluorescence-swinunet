@@ -7,8 +7,7 @@ import csv
 
 def count_objects(mask_path):
     """
-    mask_path: path to a binary mask (0 or 255)
-    Returns: number of connected components (objects)
+    Count connected components in a binary mask (0/255).
     """
     mask = np.array(Image.open(mask_path).convert("L"))
     _, bw = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY)
@@ -16,14 +15,12 @@ def count_objects(mask_path):
     # Connected components
     num_labels, labels = cv2.connectedComponents(bw)
 
-    # Subtract 1 (background)
-    return num_labels - 1
-
+    return num_labels - 1   # exclude background
 
 def process_folder(mask_dir, out_csv):
     os.makedirs(os.path.dirname(out_csv), exist_ok=True)
 
-    files = sorted([f for f in os.listdir(mask_dir) if f.endswith(".png")])
+    files = sorted([f for f in os.listdir(mask_dir) if f.lower().endswith(".png")])
 
     with open(out_csv, "w", newline="") as f:
         writer = csv.writer(f)
@@ -33,18 +30,15 @@ def process_folder(mask_dir, out_csv):
             path = os.path.join(mask_dir, fname)
             count = count_objects(path)
             writer.writerow([fname, count])
-            print(f"{fname}: {count} objects")
+            print(f"{fname}: {count}")
 
-    print(f"\n[INFO] Saved CSV → {out_csv}")
-
+    print(f"\n[INFO] Saved → {out_csv}")
 
 def parse_args():
     p = argparse.ArgumentParser()
-    p.add_argument("--mask_root", type=str, required=True,
-                   help="folder containing predicted masks for ONE color")
+    p.add_argument("--mask_root", type=str, required=True)
     p.add_argument("--output_csv", type=str, required=True)
     return p.parse_args()
-
 
 if __name__ == "__main__":
     args = parse_args()
