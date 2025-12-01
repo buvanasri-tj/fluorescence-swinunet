@@ -1,30 +1,15 @@
-experiment_name: "yolo_fluo_detection"
-
 model:
-  name: "YOLODetector"
-  in_channels: 3
-  num_classes: 1
+  num_classes: 2
+  pretrained_ckpt: ""   # optional path to checkpoint (partial)
 
 training:
-  epochs: 80
-  batch_size: 8
-  learning_rate: 1e-4
-  weight_decay: 1e-5
-  optimizer: "adam"
-  scheduler: "step"
-  step_size: 20
-  gamma: 0.5
+  epochs: 30
+  batch_size: 2
+  learning_rate: 0.001
+  weight_decay: 1e-4
 
 dataset:
-  root_dir: "data/"
-  image_size: 512
-
-paths:
-  green: "data/green"
-  red: "data/red"
-  yellow: "data/yellow"
-  labels: "data/detection_labels"
-
-save:
-  ckpt_dir: "checkpoints/detector/"
-  save_every: 5
+  train_images_dir: "data/detection/train/images"
+  train_labels: "data/detection/train/labels"   # folder of txts OR COCO json file path
+  val_images_dir: "data/detection/val/images"
+  val_labels: "data/detection/val/labels"
