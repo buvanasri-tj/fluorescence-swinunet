@@ -1,4 +1,3 @@
-# scripts/train_segmentation.py
 import os
 import sys
 import argparse
@@ -18,8 +17,7 @@ from scripts.trainer import train_one_epoch
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--cfg", type=str, required=True)
-    p.add_argument("--output_dir", type=str, default="results/checkpoints")
-    p.add_argument("--num_workers", type=int, default=4)
+    p.add_argument("--output_dir", type=str, default="checkpoints/seg")
     return p.parse_args()
 
 
@@ -32,44 +30,41 @@ if __name__ == "__main__":
     args = parse_args()
     cfg = load_yaml(args.cfg)
 
+    img_size = cfg["dataset"]["image_size"]
+    batch_size = cfg["training"]["batch_size"]
+    epochs = cfg["training"]["epochs"]
+
+    model_cfg = cfg["model"]
     device = "cuda" if torch.cuda.is_available() else "cpu"
+
+    # Create model
+    model = SwinUNet(
+        in_channels=model_cfg["in_channels"],
+        num_classes=model_cfg["num_classes"]
+    ).to(device)
+
+    # Load pretrained checkpoint
+    ckpt = model_cfg.get("pretrained_ckpt", None)
+    if ckpt:
+        ckpt = os.path.join(ROOT, ckpt)
+        if os.path.exists(ckpt):
+            print(f"[INFO] Loading pretrained weights: {ckpt}")
+            state = torch.load(ckpt, map_location=device)
+            model.load_state_dict(state, strict=False)
+
+    # Dataset
+    train_ds = SegmentationDataset(cfg["dataset"]["root_dir"], split="train", image_size=img_size)
+    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
+
+    optimizer = torch.optim.AdamW(model.parameters(),
+                                  lr=cfg["training"]["learning_rate"])
 
     os.makedirs(args.output_dir, exist_ok=True)
 
-    # Model
-    print("\n[INFO] Creating model...")
-    m_cfg = cfg["model"]
-    model = SwinUNet(
-        in_channels=m_cfg["in_channels"],
-        num_classes=m_cfg["num_classes"]
-    ).to(device)
+    print("[INFO] Training starts...")
 
-    # Dataset
-    ds_cfg = cfg["dataset"]
-    img_size = ds_cfg["image_size"]
-    root_dir = ds_cfg["root_dir"]
+    for ep in range(epochs):
+        loss, dice = train_one_epoch(model, train_loader, optimizer, ep, args.output_dir)
+        print(f"Epoch {ep}: loss={loss:.4f}, dice={dice:.4f}")
 
-    print(f"[INFO] Loading dataset from {root_dir} with size {img_size} ...")
-
-    train_ds = SegmentationDataset(root_dir, split="train", image_size=img_size)
-    val_ds = SegmentationDataset(root_dir, split="val", image_size=img_size)
-
-    train_loader = DataLoader(train_ds, batch_size=cfg["training"]["batch_size"],
-                              shuffle=True, num_workers=args.num_workers)
-    val_loader = DataLoader(val_ds, batch_size=1, shuffle=False)
-
-    # Optimizer
-    opt = torch.optim.AdamW(
-        model.parameters(),
-        lr=cfg["training"]["learning_rate"],
-        weight_decay=cfg["training"]["weight_decay"]
-    )
-
-    print("\n[INFO] Starting training...")
-    for epoch in range(cfg["training"]["epochs"]):
-        loss, dice = train_one_epoch(
-            model, train_loader, opt, epoch, args.output_dir
-        )
-        print(f"Epoch {epoch} | Loss={loss:.4f} | Dice={dice:.4f}")
-
-    print("\n[INFO] Training complete!")
+    print("[INFO] Training done.")
