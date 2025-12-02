@@ -1,242 +1,210 @@
 # scripts/predict_segmentation.py
-"""
-Predict segmentation masks and create high-quality overlays for publication.
-- Handles models saved either as state_dict or checkpoint (with "model" key).
-- Safely supports grayscale source images (converts to in_channels).
-- Resizes predicted mask back to original image size and creates a transparent overlay
-  + draws contours for clarity.
-- Processes all three color folders (green, red, yellow) if present, or a single
-  input directory if you prefer.
-"""
-
 import os
 import sys
 import argparse
-from pathlib import Path
-
+import torch
 import numpy as np
 from PIL import Image
-import cv2
-import torch
 import torchvision.transforms as T
+import cv2
 
-# Ensure repo root in path so `models` and `datasets` imports work
+# Ensure repo root is importable
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 
-from models.swinunet import SwinUNet  # assumes this file exists in models/
+from models.swinunet import SwinUNet
 
-
-def get_transform(in_channels, image_size=224):
-    """
-    Produce the transform used for prediction that matches training preprocessing.
-    If input images are single-channel grayscale, we convert to `in_channels` using
-    torchvision.transforms.Grayscale(num_output_channels=in_channels).
-    """
-    normalize_means = [0.5] * in_channels
-    normalize_stds = [0.5] * in_channels
-
-    return T.Compose([
-        T.Resize((image_size, image_size)),
-        T.Grayscale(num_output_channels=in_channels),
-        T.ToTensor(),
-        T.Normalize(mean=normalize_means, std=normalize_stds),
-    ])
-
-
-def load_image_tensor(path, transform, device):
-    """Load an image (any size), convert to grayscale, transform and return tensor on device."""
-    img = Image.open(path).convert("L")  # original fluorescence is single-channel
-    t = transform(img).unsqueeze(0).to(device)  # shape: (1, C, H, W)
-    return t
-
-
-def save_mask_png(mask_arr, out_path):
-    """Save a binary mask (0/255) numpy array as PNG."""
-    pil = Image.fromarray(mask_arr.astype(np.uint8))
-    pil.save(out_path)
-
-
-def overlay_mask(image_path, mask_tensor, out_path, alpha=0.35, contour_color=(255, 255, 0)):
-    """
-    Create an overlay on the original image.
-    - image_path: path to original image (keeps original resolution)
-    - mask_tensor: predicted probability (1,1,h,w) or (1,h,w) in normalized scale [0..1] or logits
-    - out_path: where to save overlay PNG
-    """
-    # Load original image in RGB at original size
-    img = Image.open(image_path).convert("RGB")
-    img_np = np.array(img)  # H x W x 3
-
-    # Convert mask tensor to numpy (H_pred x W_pred)
-    if isinstance(mask_tensor, torch.Tensor):
-        mask_np = mask_tensor.squeeze().cpu().numpy()
+# -------------------------
+# Utilities & transforms
+# -------------------------
+def get_transform(in_chans):
+    """Return transform that produces the correct number of channels for the model."""
+    # We always resize to 224 for Swin input (model trained with 224)
+    # Normalize like training: mean=0.5 std=0.5 for each channel
+    if in_chans == 3:
+        return T.Compose([
+            T.Resize((224, 224)),
+            T.Grayscale(num_output_channels=3),  # convert 1->3 if needed
+            T.ToTensor(),
+            T.Normalize([0.5]*3, [0.5]*3),
+        ])
     else:
-        mask_np = np.array(mask_tensor)
-
-    # If mask is logits (maybe outside 0..1), apply sigmoid/clipping
-    if mask_np.max() > 1.0 or mask_np.min() < 0.0:
-        mask_np = 1.0 / (1.0 + np.exp(-mask_np))  # sigmoid
-
-    # Upscale predicted mask to original image size
-    h0, w0 = img_np.shape[:2]
-    mask_up = cv2.resize(mask_np, (w0, h0), interpolation=cv2.INTER_LINEAR)
-
-    # Binary mask
-    bin_mask = (mask_up > 0.5).astype(np.uint8) * 255  # uint8 0/255
-
-    # Transparent color overlay (red)
-    red_layer = np.zeros_like(img_np)
-    red_layer[..., 0] = 255
-
-    # Blend where mask present
-    overlay = img_np.copy().astype(np.float32)
-    red_layer = red_layer.astype(np.float32)
-    mask_bool = bin_mask.astype(bool)
-    overlay[mask_bool] = (overlay[mask_bool] * (1 - alpha) + red_layer[mask_bool] * alpha).astype(np.uint8)
-
-    overlay = overlay.astype(np.uint8)
-
-    # Draw contours for clarity
-    contours, _ = cv2.findContours(bin_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    if len(contours) > 0:
-        cv2.drawContours(overlay, contours, -1, contour_color, thickness=2)
-
-    # Save overlay
-    Image.fromarray(overlay).save(out_path)
+        # if model expects 1 channel (rare for Swin) keep single channel
+        return T.Compose([
+            T.Resize((224, 224)),
+            T.Grayscale(num_output_channels=1),
+            T.ToTensor(),
+            T.Normalize([0.5], [0.5]),
+        ])
 
 
-def predict_folder(model, device, in_dir, out_root, transform, save_masks=True, save_overlays=True):
+def preprocess_for_model(image_path, transform):
+    """Load original image (PIL), return original PIL and transformed tensor (1 x C x H x W)."""
+    img = Image.open(image_path).convert("L")  # read as single-channel from microscope
+    orig = Image.open(image_path).convert("RGB")  # original RGB for overlay
+    tensor = transform(img).unsqueeze(0)  # add batch dim
+    return orig, tensor
+
+
+def postprocess_mask(prob_map, orig_size, morph_kernel=3, blur_ksize=5):
     """
-    Predict for all PNG files in `in_dir`.
-    Saves masks to out_root/masks and overlays to out_root/overlays.
+    prob_map: numpy array HxW with probabilities (0..1) at model input resolution (224x224)
+    orig_size: (W,H) of original image to resize mask back to full-res
+    returns: cleaned binary mask as PIL L (0/255)
     """
-    os.makedirs(out_root, exist_ok=True)
-    masks_dir = os.path.join(out_root, "masks")
-    overlays_dir = os.path.join(out_root, "overlays")
-    if save_masks:
-        os.makedirs(masks_dir, exist_ok=True)
-    if save_overlays:
-        os.makedirs(overlays_dir, exist_ok=True)
+    # Convert prob -> binary (threshold)
+    mask = (prob_map >= 0.5).astype(np.uint8) * 255  # 0/255
 
-    files = sorted([f for f in os.listdir(in_dir) if f.lower().endswith((".png", ".jpg", ".tif", ".tiff"))])
-    print(f"[INFO] Predicting {len(files)} images from {in_dir}")
+    # morphological closing to fill holes + opening to remove tiny specks
+    kernel = np.ones((morph_kernel, morph_kernel), np.uint8)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
 
-    for fname in files:
-        inp = os.path.join(in_dir, fname)
-        img_tensor = load_image_tensor(inp, transform, device)  # (1, C, 224, 224)
+    # Optional blurring to smooth edges (apply before resizing gives better result)
+    if blur_ksize > 0:
+        # blur expects odd kernel
+        k = blur_ksize if blur_ksize % 2 == 1 else blur_ksize + 1
+        mask = cv2.GaussianBlur(mask, (k, k), 0)
+
+    # Resize to original size (NEAREST to keep binary), but blurring above creates near-binary which smooths
+    orig_w, orig_h = orig_size
+    mask_resized = cv2.resize(mask, (orig_w, orig_h), interpolation=cv2.INTER_NEAREST)
+
+    # Ensure strict binary again
+    _, mask_resized = cv2.threshold(mask_resized, 127, 255, cv2.THRESH_BINARY)
+
+    return Image.fromarray(mask_resized.astype(np.uint8))
+
+
+def create_alpha_overlay(orig_pil, mask_pil, color=(255, 0, 0), alpha=0.55):
+    """
+    orig_pil: RGB PIL
+    mask_pil: L PIL (0/255)
+    color: RGB tuple for overlay color
+    alpha: blending factor for overlayed color
+    returns: PIL RGB blended image
+    """
+    orig_np = np.array(orig_pil).astype(np.uint8)
+    mask_np = np.array(mask_pil).astype(np.uint8)  # 0/255
+
+    overlay = orig_np.copy()
+    colored = np.zeros_like(orig_np)
+    colored[:, :] = color
+
+    mask_bool = mask_np > 0
+    # blend only where mask is True
+    overlay[mask_bool] = (overlay[mask_bool].astype(float) * (1.0 - alpha) +
+                          colored[mask_bool].astype(float) * alpha).astype(np.uint8)
+
+    return Image.fromarray(overlay)
+
+
+# -----------------------------------
+# Prediction loop
+# -----------------------------------
+def predict_folder(model, input_dir, output_dir, transform, device,
+                   morph_kernel=3, blur_ksize=5, alpha=0.55):
+    os.makedirs(output_dir, exist_ok=True)
+    masks_dir = os.path.join(output_dir, "masks")
+    overlays_dir = os.path.join(output_dir, "overlays")
+    os.makedirs(masks_dir, exist_ok=True)
+    os.makedirs(overlays_dir, exist_ok=True)
+
+    images = sorted([f for f in os.listdir(input_dir)
+                     if f.lower().endswith((".png", ".jpg", ".jpeg", ".tif", ".tiff"))])
+
+    print(f"[INFO] Predicting {len(images)} images from {input_dir}")
+
+    for fname in images:
+        img_path = os.path.join(input_dir, fname)
+
+        orig_pil, input_tensor = preprocess_for_model(img_path, transform)
+        input_tensor = input_tensor.to(device)
 
         with torch.no_grad():
-            pred = model(img_tensor)      # model should return logits or single-channel output
-            # If model returns (B, C, H, W) and C>1, try to reduce to single channel (e.g. class 1)
-            if pred.dim() == 4 and pred.shape[1] > 1:
-                # assume binary segmentation with two channels (bg, fg)
-                pred = pred[:, 1:2, :, :]  # take foreground logits/prob
-            # Ensure pred is (1, 1, H, W) or (1, H, W)
-            # Convert logits to probabilities
-            pred_prob = torch.sigmoid(pred)
+            logits = model(input_tensor)           # raw logits (B, C, H, W)
+            probs = torch.sigmoid(logits)          # probs 0..1
+            # if model outputs multi-channel (C>1) but we used num_classes=1 - handle accordingly
+            probs = probs.squeeze().cpu().numpy()  # (H, W) if 1-channel or (C, H, W) otherwise
 
-        # Save mask (upsampled to original size)
-        # Create binary mask uint8
-        pred_np = pred_prob.squeeze().cpu().numpy()  # H x W
-        # Upsample to original size and threshold
-        # We'll use overlay_mask to upsample again; but save a full-size mask as well
-        h_orig, w_orig = Image.open(inp).size[::-1]  # PIL size is (W,H) -> flip
-        mask_up = cv2.resize(pred_np, (w_orig, h_orig), interpolation=cv2.INTER_LINEAR)
-        bin_mask = (mask_up > 0.5).astype(np.uint8) * 255
+            # If multi-channel returned, assume first channel is foreground
+            if probs.ndim == 3:
+                probs = probs[0]
 
-        if save_masks:
-            save_mask_png(bin_mask, os.path.join(masks_dir, fname))
+        # probs currently at model input resolution (224,224) — postprocess then resize to original
+        mask_pil = postprocess_mask(probs, orig_pil.size, morph_kernel=morph_kernel, blur_ksize=blur_ksize)
 
-        if save_overlays:
-            overlay_path = os.path.join(overlays_dir, fname)
-            # pass the small pred_prob tensor to overlay function (it will upsample internally)
-            overlay_mask(inp, pred_prob.squeeze(), overlay_path)
+        # Save mask (binary) and overlay (alpha-blend)
+        mask_out = os.path.join(masks_dir, fname)
+        overlay_out = os.path.join(overlays_dir, fname)
 
-        print(f"[OK] {fname} → saved mask + overlay")
+        mask_pil.save(mask_out)
+        overlay = create_alpha_overlay(orig_pil, mask_pil, alpha=alpha)
+        overlay.save(overlay_out)
+
+        print(f"[OK] {fname} — mask & overlay saved.")
 
 
-def safe_load_checkpoint(model, checkpoint_path, device):
-    """Load checkpoint flexibly: support full checkpoint dict or bare state_dict"""
-    state = torch.load(checkpoint_path, map_location=device)
-    if isinstance(state, dict) and "model" in state:
-        state_dict = state["model"]
-    else:
-        state_dict = state
-    # try strict load first, fallback to non-strict
-    try:
-        model.load_state_dict(state_dict, strict=True)
-    except Exception as e:
-        print(f"[WARN] strict load failed ({e}), attempting non-strict load")
-        model.load_state_dict(state_dict, strict=False)
-
-
-def find_color_test_folders(data_root, colors=("green", "red", "yellow")):
-    """
-    Look for <data_root>/<color>/test/images and return dict color->path (only existing ones).
-    Also support a direct input folder if data_root is a folder containing images (no colors).
-    """
-    out = {}
-    data_root = Path(data_root)
-    # first check for color folders
-    found = False
-    for c in colors:
-        p = data_root / c / "test" / "images"
-        if p.is_dir():
-            out[c] = str(p)
-            found = True
-
-    if not found:
-        # fallback: if data_root contains images directly, use it as 'all'
-        imgs = list(data_root.glob("*.png")) + list(data_root.glob("*.jpg")) + list(data_root.glob("*.tif"))
-        if len(imgs) > 0:
-            out["all"] = str(data_root)
-    return out
-
-
+# -----------------------------------
+# CLI
+# -----------------------------------
 def parse_args():
-    p = argparse.ArgumentParser(description="Predict segmentation and save overlays")
-    p.add_argument("--checkpoint", required=True, help="path to checkpoint (best_model.pth or similar)")
-    p.add_argument("--data_root", required=True, help="root folder with color subfolders or images")
-    p.add_argument("--output_root", default="predictions", help="where to save masks/overlays")
-    p.add_argument("--in_channels", type=int, default=3, help="model input channels (default: 3)")
-    p.add_argument("--image_size", type=int, default=224, help="Swin input image size (must match model training)")
-    p.add_argument("--device", type=str, default=None, help="cpu or cuda (auto-detect if omitted)")
+    p = argparse.ArgumentParser()
+    p.add_argument("--checkpoint", type=str, required=True,
+                   help="path to model checkpoint (.pth)")
+    p.add_argument("--data_root", type=str, required=True,
+                   help="root data directory containing color folders (green, yellow, red) with test/images")
+    p.add_argument("--output_root", type=str, default="predictions_seg",
+                   help="root output folder to store masks/overlays per color")
+    p.add_argument("--in_channels", type=int, default=3,
+                   help="model input channels (3 for Swin trained with 3-channel input)")
+    p.add_argument("--colors", type=str, default="green,yellow,red",
+                   help="comma-separated color folders to predict")
+    p.add_argument("--device", type=str, default=None,
+                   help="device to run on (cuda/cpu). auto-detect if omitted")
+    p.add_argument("--morph_kernel", type=int, default=3,
+                   help="morphological kernel size to clean masks")
+    p.add_argument("--blur_ksize", type=int, default=5,
+                   help="gaussian blur kernel to smooth mask boundaries (odd int, 0 to disable)")
+    p.add_argument("--alpha", type=float, default=0.55,
+                   help="overlay alpha for blending mask color")
     return p.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
+    device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Device
-    if args.device:
-        device = torch.device(args.device)
-    else:
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    # Build model
     print("[INFO] Creating model...")
     model = SwinUNet(in_channels=args.in_channels, num_classes=1).to(device)
 
-    # Load checkpoint (flexible)
     print(f"[INFO] Loading checkpoint: {args.checkpoint}")
-    safe_load_checkpoint(model, args.checkpoint, device)
+    chk = torch.load(args.checkpoint, map_location=device)
+    # load state_dict robustly in case shapes differ slightly
+    if "state_dict" in chk:
+        state = chk["state_dict"]
+    elif "model" in chk:
+        state = chk["model"]
+    else:
+        state = chk
+    model.load_state_dict(state, strict=False)
     model.eval()
 
-    # Prepare transforms
-    transform = get_transform(args.in_channels, image_size=args.image_size)
+    transform = get_transform(args.in_channels)
 
-    # Find folders to process
-    folders = find_color_test_folders(args.data_root)
-    if not folders:
-        print(f"[ERROR] No test folders or images found under {args.data_root}")
-        raise SystemExit(1)
+    colors = [c.strip() for c in args.colors.split(",") if c.strip()]
 
-    # Process each found folder
-    for color, folder in folders.items():
+    for color in colors:
+        input_dir = os.path.join(args.data_root, color, "test", "images")
+        if not os.path.isdir(input_dir):
+            print(f"[WARN] Missing test folder for color '{color}': {input_dir} — skipped")
+            continue
+
         out_dir = os.path.join(args.output_root, color)
-        os.makedirs(out_dir, exist_ok=True)
-        predict_folder(model, device, folder, out_dir, transform)
+        predict_folder(model, input_dir, out_dir, transform, device,
+                       morph_kernel=args.morph_kernel,
+                       blur_ksize=args.blur_ksize,
+                       alpha=args.alpha)
 
-    print("[INFO] Prediction complete.")
+    print("\n[INFO] All done.")
