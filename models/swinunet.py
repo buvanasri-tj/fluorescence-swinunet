@@ -9,7 +9,7 @@ class SwinUNet(nn.Module):
 
         # img_size MUST be 224 with window_size=7 + patch_size=4
         self.backbone = SwinTransformerSys(
-            img_size=512,
+            img_size=224,
             patch_size=4,
             in_chans=in_channels,   # 3-channel fluorescence
             num_classes=num_classes,  # binary mask
